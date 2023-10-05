@@ -168,6 +168,17 @@ public:
 			{
 				Customer *cus = new Customer(name, energy, nullptr, nullptr);
 				findMaxDifference(headTable, cus);
+				if (numCustomers == MAXSIZE - 1){
+					Customer *temp = headTable;
+					while(!temp){
+						if(temp){
+							temp -> next = headTable;
+							headTable -> prev = temp;
+							break;
+						}
+						temp = temp -> next;
+					}
+				}
 				numCustomers++;
 			}
 		}
@@ -220,7 +231,7 @@ public:
 	}
 	Customer FIFO(){
 		if (currSizeQueue == 0 || !headQueue){
-			return;
+			return nullptr;
 		}
 		else {
 			Customer *removedCustomer = headQueue;
@@ -236,9 +247,23 @@ public:
 			return *removedCustomer;
 		}
 	}
+	void orderOfCustomer(Customer *newCustomer){
+		
+	}
 	void kickOutCustomer(int num){
 		if (num == 1) {
-
+			Customer *temp = headTable;
+			temp -> next = headTable -> next;
+			temp -> prev = headTable -> prev;
+			if (headTable -> energy > 0){
+				headTable = headTable -> next;
+				headTable -> prev = temp -> prev;
+			}
+			if (headTable -> energy < 0){
+				headTable = headTable -> prev;
+				headTable -> next = temp -> next;
+			}
+			delete temp;
 		}
 	}
 	void RED(string name, int energy)
