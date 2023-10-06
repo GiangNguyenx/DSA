@@ -70,15 +70,16 @@ public:
 
 private:
 	int numCustomers;
-	int maxSizeQueue;
 	int currSizeQueue;
 	Customer *headTable;
 	Customer *curCustomer;
 	Customer *headQueue;
 	Customer *tailQueue;
+	Customer *headOrderQ;
+	Customer *tailOrderQ;
 
 public:
-	imp_res() : headQueue(nullptr), headTable(nullptr), curCustomer(nullptr), numCustomers(0) {}
+	imp_res() : headQueue(nullptr), tailQueue(nullptr), headTable(nullptr), curCustomer(nullptr), headOrderQ(nullptr), tailOrderQ(nullptr), numCustomers(0), currSizeQueue(0) {}
 
 	void findMaxDifference(Customer *headTable, Customer *newCustomer)
 	{
@@ -182,6 +183,7 @@ public:
 				numCustomers++;
 			}
 		}
+		if (numCustomers >= MAXSIZE / 2  && currSizeQueue)
 		if (numCustomers >= MAXSIZE)
 		{
 			Customer *cus = new Customer(name, energy, nullptr, nullptr);
@@ -243,27 +245,70 @@ public:
 				tailQueue = nullptr;
 			}
 			removedCustomer -> next = nullptr;
+			removedCustomer -> prev = nullptr;
 			currSizeQueue--;
 			return *removedCustomer;
 		}
 	}
-	void orderOfCustomer(Customer *newCustomer){
-		
+	Customer orderOfCustomer(Customer *newCustomer){
+		if (currSizeOrderQ == 0 || !headOrderQ)
+			{
+				headOrderQ = tailOrderQ = newCustomer;
+			}
+		else
+			{
+				newCustomer->prev= tailOrderQ;
+				tailOrderQ -> next = newCustomer;
+				tailOrderQ = newCustomer;
+			}
 	}
 	void kickOutCustomer(int num){
-		if (num == 1) {
-			Customer *temp = headTable;
-			temp -> next = headTable -> next;
-			temp -> prev = headTable -> prev;
-			if (headTable -> energy > 0){
-				headTable = headTable -> next;
-				headTable -> prev = temp -> prev;
+		// if (num == 1) {
+		// 	Customer *temp = headTable;
+		// 	temp -> next = headTable -> next;
+		// 	temp -> prev = headTable -> prev;
+		// 	if (headTable -> energy > 0){
+		// 		headTable = headTable -> next;
+		// 		headTable -> prev = temp -> prev;
+		// 	}
+		// 	if (headTable -> energy < 0){
+		// 		headTable = headTable -> prev;
+		// 		headTable -> next = temp -> next;
+		// 	}
+		// 	delete temp;
+		// }
+		Customer *temp1 = headOrderQ;
+		Customer *temp2 = headTable;
+		for (int i = 1; i <= num; i++){
+			while (temp1 != nullptr && temp2 -> next != headTable){
+				Customer *temp = temp2;
+				if (temp2 == headTable){
+					temp -> next = headTable -> next;
+					temp -> prev = headTable -> prev;
+					if (headTable -> energy > 0){
+						headTable = headTable -> next;
+						headTable -> prev = temp -> prev;
+					}
+					if (headTable -> energy < 0){
+						headTable = headTable -> prev;
+						headTable -> next = temp -> next;
+					}
+					temp2 = temp2 -> next;
+					delete temp;
+				}
+				else {
+					if (temp1 -> name == temp2 -> name){
+						temp -> next = temp2 -> next;
+						temp -> prev = temp2 -> prev;
+						temp2 = temp2 -> next;
+						delete temp;
+					}
+					else {
+						temp2 = temp2 -> next;
+					}
+				}
+				temp1 = temp1 -> next;
 			}
-			if (headTable -> energy < 0){
-				headTable = headTable -> prev;
-				headTable -> next = temp -> next;
-			}
-			delete temp;
 		}
 	}
 	void RED(string name, int energy)
