@@ -234,9 +234,7 @@ public:
 			Customer *cus = new Customer(name, energy, nullptr, nullptr);
 			addCustomerInQueue(cus);
 		}
-		if (numAfterKick < MAXSIZE / 2 && currSizeQueue)
-		{
-		}
+
 	}
 	void checkNameOfCustomer(string name, int energy)
 	{
