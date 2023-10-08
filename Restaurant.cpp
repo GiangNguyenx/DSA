@@ -69,6 +69,7 @@ private:
 	int currSizeQueue;
 	int jujutsu;
 	int jurei;
+	int numAfterKick;
 	Customer *headTable;
 	Customer *curCustomer;
 	Customer *headQueue;
@@ -77,7 +78,7 @@ private:
 	Customer *tailOrderQ;
 
 public:
-	imp_res() : headQueue(nullptr), tailQueue(nullptr), headTable(nullptr), curCustomer(nullptr), headOrderQ(nullptr), tailOrderQ(nullptr), numCustomers(0), currSizeQueue(0), jujutsu(0), jurei(0) {}
+	imp_res() : headQueue(nullptr), tailQueue(nullptr), headTable(nullptr), curCustomer(nullptr), headOrderQ(nullptr), tailOrderQ(nullptr), numCustomers(0), currSizeQueue(0), jujutsu(0), jurei(0), numAfterKick(0) {}
 
 	void findMaxDifference(Customer *headTable, Customer *newCustomer)
 	{
@@ -184,12 +185,14 @@ public:
 				numCustomers++;
 			}
 		}
-		if (numCustomers >= MAXSIZE / 2 && currSizeQueue)
-			if (numCustomers >= MAXSIZE)
-			{
-				Customer *cus = new Customer(name, energy, nullptr, nullptr);
-				addCustomerInQueue(cus);
-			}
+		if (numCustomers >= MAXSIZE)
+		{
+			Customer *cus = new Customer(name, energy, nullptr, nullptr);
+			addCustomerInQueue(cus);
+		}
+		if (numAfterKick < MAXSIZE / 2 && currSizeQueue)
+		{
+		}
 	}
 	void checkNameOfCustomer(string name, int energy)
 	{
@@ -232,7 +235,7 @@ public:
 			}
 		}
 	}
-	Customer FIFO()
+	Customer *FIFO()
 	{
 		if (numCustomers < MAXSIZE && currSizeQueue <= MAXSIZE)
 		{
@@ -255,11 +258,11 @@ public:
 				removedCustomer->next = nullptr;
 				removedCustomer->prev = nullptr;
 				currSizeQueue--;
-				return *removedCustomer;
+				return removedCustomer;
 			}
 		}
 	}
-	Customer orderOfCustomer(Customer *newCustomer)
+	void orderOfCustomer(Customer *newCustomer)
 	{
 		if (!headOrderQ)
 		{
@@ -274,6 +277,7 @@ public:
 	}
 	void kickOutCustomer(int num)
 	{
+		numAfterKick = numCustomers;
 		Customer *temp1 = headOrderQ;
 		Customer *temp2 = headTable;
 		for (int i = 1; i <= num; i++)
@@ -297,6 +301,7 @@ public:
 					}
 					temp2 = temp2->next;
 					delete temp;
+					numAfterKick--;
 				}
 				else
 				{
@@ -306,6 +311,7 @@ public:
 						temp->prev = temp2->prev;
 						temp2 = temp2->next;
 						delete temp;
+						numAfterKick--;
 					}
 					else
 					{
@@ -316,86 +322,118 @@ public:
 			}
 		}
 	}
-	void swapInfo(Customer *cus1, Customer *cus2){
-		int tempEnergy = cus1 -> energy;
-		string tempName = cus1 -> name;
-		cus1 -> energy = cus2 -> energy;
-		cus1 -> name = cus2 -> name;
-		cus2 -> energy = tempEnergy;
-		cus2 -> name = tempName;
+	void swapInfo(Customer *cus1, Customer *cus2)
+	{
+		int tempEnergy = cus1->energy;
+		string tempName = cus1->name;
+		cus1->energy = cus2->energy;
+		cus1->name = cus2->name;
+		cus2->energy = tempEnergy;
+		cus2->name = tempName;
 	}
-	void reversalTable(){
+	void reversalTable()
+	{
 		Customer *count = headTable;
 		Customer *temp1 = headTable;
 		Customer *temp2 = headTable;
 		Customer *temp3 = headTable;
 		Customer *temp4 = headTable;
-		while (count -> next != headTable){
-			if (count -> energy > 0){
+		while (count->next != headTable)
+		{
+			if (count->energy > 0)
+			{
 				jujutsu++;
 			}
-			else jurei++;
-			count = count -> next;
+			else
+				jurei++;
+			count = count->next;
 		}
-		while (temp2 -> energy > 0){
-			if (headTable -> energy < 0) break;
-			else temp2 = temp2 -> prev;
+		while (temp2->energy > 0)
+		{
+			if (headTable->energy < 0)
+				break;
+			else
+				temp2 = temp2->prev;
 		}
-		while (temp1 -> energy > 0){
-			if (headTable -> energy < 0) temp1 = temp1 -> next;
-			else temp1 = temp1 -> next;
+		while (temp1->energy > 0)
+		{
+			if (headTable->energy < 0)
+				temp1 = temp1->next;
+			else
+				temp1 = temp1->next;
 		}
-		if (jurei > 0){
-			while (jurei != 0){
-				if (temp1 -> energy < 0 && temp2 -> energy < 0){
+		if (jurei > 0)
+		{
+			while (jurei != 0)
+			{
+				if (temp1->energy < 0 && temp2->energy < 0)
+				{
 					swapInfo(temp1, temp2);
 					jurei -= 2;
-					temp1 = temp1 -> next;
-					temp2 = temp2 -> next;
+					temp1 = temp1->next;
+					temp2 = temp2->next;
 				}
-				else if (temp1 -> energy > 0 && temp2 -> energy > 0) {
-					temp1 = temp1 -> next;
-					temp2 = temp2 -> next;
+				else if (temp1->energy > 0 && temp2->energy > 0)
+				{
+					temp1 = temp1->next;
+					temp2 = temp2->next;
 				}
-				else if (temp1 -> energy > 0 && temp2 -> energy < 0){
-					temp1 = temp1 -> next;
+				else if (temp1->energy > 0 && temp2->energy < 0)
+				{
+					temp1 = temp1->next;
 				}
-				else {
-					temp2 = temp2 -> next;
+				else
+				{
+					temp2 = temp2->next;
 				}
-				if (jurei == 1) break;
+				if (jurei == 1)
+					break;
 			}
 		}
-		while (temp4 -> energy < 0){
-			if (headTable -> energy > 0) break;
-			else temp4 = temp4 -> prev;
+		while (temp4->energy < 0)
+		{
+			if (headTable->energy > 0)
+				break;
+			else
+				temp4 = temp4->prev;
 		}
-		while (temp3 -> energy < 0){
-			if (headTable -> energy > 0) temp3 = temp3 -> next;
-			else temp3 = temp3 -> next;
+		while (temp3->energy < 0)
+		{
+			if (headTable->energy > 0)
+				temp3 = temp3->next;
+			else
+				temp3 = temp3->next;
 		}
-		if (jujutsu > 0){
-			while (jujutsu != 0){
-				if (temp3 -> energy > 0 && temp4 -> energy > 0){
+		if (jujutsu > 0)
+		{
+			while (jujutsu != 0)
+			{
+				if (temp3->energy > 0 && temp4->energy > 0)
+				{
 					swapInfo(temp3, temp4);
 					jurei -= 2;
-					temp3 = temp3 -> next;
-					temp4 = temp4 -> next;
+					temp3 = temp3->next;
+					temp4 = temp4->next;
 				}
-				else if (temp3 -> energy > 0 && temp4 -> energy > 0) {
-					temp3 = temp3 -> next;
-					temp4 = temp4 -> next;
+				else if (temp3->energy > 0 && temp4->energy > 0)
+				{
+					temp3 = temp3->next;
+					temp4 = temp4->next;
 				}
-				else if (temp3 -> energy > 0 && temp4 -> energy < 0){
-					temp3 = temp3 -> next;
+				else if (temp3->energy > 0 && temp4->energy < 0)
+				{
+					temp3 = temp3->next;
 				}
-				else {
-					temp4 = temp4 -> next;
+				else
+				{
+					temp4 = temp4->next;
 				}
-				if (jujutsu == 1) break;
+				if (jujutsu == 1)
+					break;
 			}
 		}
 	}
+
 	void RED(string name, int energy)
 	{
 		// cout << name << " " << energy << endl;
@@ -428,6 +466,9 @@ public:
 	}
 	void BLUE(int num)
 	{
+		// numAfterKick = numCustomers - num;
+		// kickOutCustomer(num);
+		// this->printTable();
 		cout << "blue " << num << endl;
 	}
 	void PURPLE()
@@ -436,6 +477,8 @@ public:
 	}
 	void REVERSAL()
 	{
+		// reversalTable();
+		// this->printTable();
 		cout << "reversal" << endl;
 	}
 	void UNLIMITED_VOID()
