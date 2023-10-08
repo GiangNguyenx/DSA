@@ -80,7 +80,7 @@ private:
 public:
 	imp_res() : headQueue(nullptr), tailQueue(nullptr), headTable(nullptr), curCustomer(nullptr), headOrderQ(nullptr), tailOrderQ(nullptr), numCustomers(0), currSizeQueue(0), jujutsu(0), jurei(0), numAfterKick(0) {}
 
-	void findMaxDifference(Customer *headTable, Customer *newCustomer)
+	void findMaxDifference(Customer *newCustomer)
 	{
 		Customer *temp = headTable;
 		int curDifference = 0;
@@ -123,15 +123,16 @@ public:
 		}
 		cout << endl;
 	}
-	
-	void insertToHead(Customer *newCustomer){
+
+	void insertToHead(Customer *newCustomer)
+	{
 		// Last element in list
 		Customer *lastCustomer = headTable->prev;
 
 		// Connect old head to new head
 		headTable->prev = newCustomer;
 		newCustomer->next = headTable;
-		
+
 		// Connect new head to current tail
 		newCustomer->prev = lastCustomer;
 		lastCustomer->next = newCustomer;
@@ -142,7 +143,8 @@ public:
 		// Increase num of customers
 		numCustomers++;
 	}
-	void insertToTail(Customer *newCustomer){
+	void insertToTail(Customer *newCustomer)
+	{
 		// Last element in list
 		Customer *lastCustomer = headTable->prev;
 
@@ -211,7 +213,7 @@ public:
 			else
 			{
 				Customer *cus = new Customer(name, energy, nullptr, nullptr);
-				findMaxDifference(headTable, cus);
+				this->findMaxDifference(cus);
 				if (numCustomers == MAXSIZE - 1)
 				{
 					Customer *temp = headTable;
@@ -234,7 +236,39 @@ public:
 			Customer *cus = new Customer(name, energy, nullptr, nullptr);
 			addCustomerInQueue(cus);
 		}
-
+		if (currSizeQueue == 0)
+		{
+			return;
+		}
+		else
+		{
+			Customer *cus = FIFO();
+			if (numAfterKick < MAXSIZE / 2)
+			{
+				if (cus -> energy >= curCustomer -> energy){
+					this->insertToTail(cus);
+				}
+				else this->insertToHead(cus);
+			}
+			if (numAfterKick > MAXSIZE / 2){
+				this -> findMaxDifference(cus);
+				if (numCustomers == MAXSIZE - 1)
+				{
+					Customer *temp = headTable;
+					while (!temp)
+					{
+						if (temp)
+						{
+							temp->next = headTable;
+							headTable->prev = temp;
+							break;
+						}
+						temp = temp->next;
+					}
+				}
+				numCustomers++;
+			}
+		}
 	}
 	void checkNameOfCustomer(string name, int energy)
 	{
@@ -256,9 +290,14 @@ public:
 	}
 	void addCustomerInQueue(Customer *newCustomer)
 	{
+		if (newCustomer->energy == 0)
+		{
+			cout << "Cook luon" << endl;
+			return;
+		}
 		if (currSizeQueue >= MAXSIZE)
 		{
-			cout << " Het cho roi cook";
+			cout << " Het cho roi cook" << endl;
 			return;
 		}
 		else
@@ -316,13 +355,16 @@ public:
 			tailOrderQ->next = newCustomer;
 			tailOrderQ = newCustomer;
 		}
-
 	}
 	void kickOutCustomer(int num)
 	{
 		numAfterKick = numCustomers;
 		Customer *temp1 = headOrderQ;
 		Customer *temp2 = headTable;
+		if (num >= numCustomers)
+		{
+			num = numCustomers;
+		}
 		for (int i = 1; i <= num; i++)
 		{
 			while (temp1 != nullptr && temp2->next != headTable)
@@ -336,11 +378,13 @@ public:
 					{
 						headTable = headTable->next;
 						headTable->prev = temp->prev;
+						curCustomer = headTable;
 					}
 					if (headTable->energy < 0)
 					{
 						headTable = headTable->prev;
 						headTable->next = temp->next;
+						curCustomer = headTable;
 					}
 					temp2 = temp2->next;
 					delete temp;
@@ -352,6 +396,14 @@ public:
 					{
 						temp->next = temp2->next;
 						temp->prev = temp2->prev;
+						if (temp2->energy > 0)
+						{
+							curCustomer = temp2 -> next;
+						}
+						if (temp2->energy < 0)
+						{
+							curCustomer = temp2 -> prev; 
+						}
 						temp2 = temp2->next;
 						delete temp;
 						numAfterKick--;
@@ -411,7 +463,7 @@ public:
 			{
 				if (temp1->energy < 0 && temp2->energy < 0)
 				{
-					swapInfo(temp1, temp2);
+					this -> swapInfo(temp1, temp2);
 					jurei -= 2;
 					temp1 = temp1->next;
 					temp2 = temp2->next;
@@ -453,7 +505,7 @@ public:
 			{
 				if (temp3->energy > 0 && temp4->energy > 0)
 				{
-					swapInfo(temp3, temp4);
+					this -> swapInfo(temp3, temp4);
 					jurei -= 2;
 					temp3 = temp3->next;
 					temp4 = temp4->next;
@@ -476,7 +528,9 @@ public:
 			}
 		}
 	}
-
+	void findMinInSubString(){
+		
+	}
 	void RED(string name, int energy)
 	{
 		// cout << name << " " << energy << endl;
