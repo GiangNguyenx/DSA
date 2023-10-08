@@ -315,6 +315,7 @@ public:
 			tailOrderQ->next = newCustomer;
 			tailOrderQ = newCustomer;
 		}
+
 	}
 	void kickOutCustomer(int num)
 	{
