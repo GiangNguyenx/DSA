@@ -322,7 +322,7 @@ public:
 		{
 			if (currSizeQueue == 0 || !headQueue)
 			{
-				return NULL;
+				return nullptr;
 			}
 			else
 			{
@@ -342,6 +342,7 @@ public:
 				return removedCustomer;
 			}
 		}
+		return nullptr;
 	}
 	void orderOfCustomer(Customer *newCustomer)
 	{
@@ -528,8 +529,42 @@ public:
 			}
 		}
 	}
-	void findMinInSubString(){
-		
+	void printMinInSubString(){
+		Customer *cur = headTable;
+		Customer *minStart = nullptr;
+		Customer *minEnd = nullptr;
+		Customer *curStart = nullptr;
+		Customer *curEnd = nullptr;
+		int minSum = 2147483647 - 1;
+		int curSum = 0;
+		if (numCustomers == 0) return;
+		while (cur != nullptr){
+			if (cur -> energy <= 0){
+				curStart = cur -> next;
+				curEnd = nullptr;
+				curSum = 0;
+			}
+			else {
+				if (curEnd == nullptr){
+					curStart = cur;
+					curEnd = cur;
+					curSum = cur -> energy;
+				}
+				else {
+					curEnd = cur;
+					curSum += cur -> energy;
+				}
+				if (curSum < minSum && curEnd != nullptr && curEnd -> next != nullptr){
+					minSum = curSum;
+					minStart = curStart;
+					minEnd = curEnd;
+				}
+			}
+			cur = cur -> next;
+		}
+		for (Customer *cus = minStart; cus != minEnd -> next; cus = cus -> next){
+			cout << cus -> name << "-" << cus -> energy << endl;
+		}
 	}
 	void RED(string name, int energy)
 	{
@@ -591,3 +626,6 @@ public:
 		cout << "light " << num << endl;
 	}
 };
+
+
+
