@@ -122,6 +122,47 @@ public:
 		}
 		cout << endl;
 	}
+	
+	void insertToHead(Customer *newCustomer){
+		// Last element in list
+		Customer *lastCustomer = headTable->prev;
+
+		// Connect old head to new head
+		headTable->prev = newCustomer;
+		newCustomer->next = headTable;
+		
+		// Connect new head to current tail
+		newCustomer->prev = lastCustomer;
+		lastCustomer->next = newCustomer;
+
+		// Change new head
+		headTable = newCustomer;
+
+		// Increase num of customers
+		numCustomers++;
+	}
+	void insertToTail(Customer *newCustomer){
+		// Last element in list
+		Customer *lastCustomer = headTable->prev;
+
+		// Connect to head
+		newCustomer->next = headTable;
+
+		// Connect prev to old tail
+		newCustomer->prev = lastCustomer;
+
+		// Connect to new tail
+		headTable->prev = newCustomer;
+
+		// Connect old tail to new tail
+		lastCustomer->next = newCustomer;
+
+		// Add flag to new Customer
+		curCustomer = newCustomer;
+
+		// Increase num of customers
+		numCustomers++;
+	}
 	void insertToTable(string name, int energy)
 	{
 		// If restaurant just opened right now
@@ -145,22 +186,25 @@ public:
 					cout << "Cut ra ngoai" << endl;
 					/* code */
 				}
-				else if (energy > 0)
+				else if (energy >= curCustomer->energy)
 				{
-					Customer *cus = new Customer(name, energy, curCustomer, nullptr);
+					Customer *newCustomer = new Customer(name, energy, curCustomer, nullptr);
 
+					this->insertToTail(newCustomer);
 					// cout << "Insert to table != 0: " << curCustomer->next->name << endl;
-					curCustomer->next = cus;
-					curCustomer = curCustomer->next;
-					numCustomers++;
+					// curCustomer->next = newCustomer;
+					// curCustomer = curCustomer->next;
+					// numCustomers++;
 				}
-				else if (energy < 0)
+				else if (energy < curCustomer->energy)
 				{
 					// cout << "\nEnergy < 0\n";
-					Customer *cus = new Customer(name, energy, nullptr, curCustomer);
-					curCustomer->prev = cus;
-					curCustomer = curCustomer->prev;
-					numCustomers++;
+					Customer *newCustomer = new Customer(name, energy, nullptr, curCustomer);
+
+					this->insertToHead(newCustomer);
+					// curCustomer->prev = cus;
+					// curCustomer = curCustomer->prev;
+					// numCustomers++;
 				}
 			}
 			else
@@ -232,13 +276,13 @@ public:
 			}
 		}
 	}
-	Customer FIFO()
+	Customer* FIFO()
 	{
 		if (numCustomers < MAXSIZE && currSizeQueue <= MAXSIZE)
 		{
 			if (currSizeQueue == 0 || !headQueue)
 			{
-				return nullptr;
+				return NULL;
 			}
 			else
 			{
@@ -255,7 +299,7 @@ public:
 				removedCustomer->next = nullptr;
 				removedCustomer->prev = nullptr;
 				currSizeQueue--;
-				return *removedCustomer;
+				return removedCustomer;
 			}
 		}
 	}
