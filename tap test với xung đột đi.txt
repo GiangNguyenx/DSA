@@ -37,3 +37,11 @@ ua la no pull code xuong chua
 dau, no pull từ bước 1 rồi, bước 2 là xóa đấy, 1 là xóa cái trên github, 2 là xóa phần mình đang làm
 để làm lại cái nữa cho thấy
 Làm lại đi
+
+Thấy head không
+co
+Thấy trên nó có mấy cái optiion không
+co
+CHọn 1 trong mấy cái đó, muốn giữ lại của mình thì chọn cái 1, cái 2 là cái từ git lấy về
+chọn lại đi
+làm tiếp các bước đi
