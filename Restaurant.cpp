@@ -85,6 +85,48 @@ public:
 		cout << endl;
 	}
 
+	void insertToLeft(Customer *newCustomer){
+		if (this->curCustomer->prev == this->headTable && this->numCustomers > 2){
+			this->insertToHead(newCustomer);
+			return;
+		} 
+
+		// Get prev node of current customer
+		Customer *prevCustomer = curCustomer->prev;
+
+		// Point current customer and prev to new customer, point new customer to cur and prev
+		curCustomer->prev = newCustomer;
+		prevCustomer->next = newCustomer;
+		newCustomer->next = curCustomer;
+		newCustomer->prev = prevCustomer;
+
+		// Change current customer
+		curCustomer = newCustomer;
+
+		// Increse customer
+		numCustomers++;
+	}
+	void insertToRight(Customer *newCustomer){
+		if (this->curCustomer->next == this->headTable && this->numCustomers > 2){
+			this->insertToTail(newCustomer);
+			return;
+		} 
+
+		// Get prev node of current customer
+		Customer *nextCustomer = curCustomer->next;
+
+		// Point current customer and prev to new customer, point new customer to cur and prev
+		curCustomer->next = newCustomer;
+		nextCustomer->prev = newCustomer;
+		newCustomer->next = curCustomer;
+		newCustomer->prev = curCustomer;
+
+		// Change current customer
+		curCustomer = newCustomer;
+
+		// Increse customer
+		numCustomers++;
+	}
 	void insertToHead(Customer *newCustomer)
 	{
 		// Last element in list
@@ -163,7 +205,7 @@ public:
 					// cout << "Insert to table != 0: " << endl;
 					Customer *newCustomer = new Customer(name, energy, curCustomer, nullptr);
 
-					this->insertToTail(newCustomer);
+					this->insertToRight(newCustomer);
 					// curCustomer->next = newCustomer;
 					// curCustomer = curCustomer->next;
 					// numCustomers++;
@@ -173,7 +215,7 @@ public:
 					// cout << "\nEnergy < 0\n";
 					Customer *newCustomer = new Customer(name, energy, nullptr, curCustomer);
 
-					this->insertToHead(newCustomer);
+					this->insertToLeft(newCustomer);
 					// curCustomer->prev = cus;
 					// curCustomer = curCustomer->prev;
 					// numCustomers++;
@@ -540,7 +582,7 @@ public:
 		// cout << name << " " << energy << endl;
 		// cout << MAXSIZE << endl;
 		this->insertToTable(name, energy);
-		// this->printTable();
+		this->printTable();
 		// cout << this->numCustomers << endl;
 	}
 	void BLUE(int num)
