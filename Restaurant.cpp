@@ -1,4 +1,4 @@
-// Restaurant.cpp
+// Restaurant.cpp day
 
 #include "main.h"
 
