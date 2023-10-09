@@ -86,10 +86,10 @@ public:
 	}
 
 	void insertToLeft(Customer *newCustomer){
-		if (this->curCustomer->prev == this->headTable && this->numCustomers > 2){
-			this->insertToHead(newCustomer);
-			return;
-		} 
+		// if (this->curCustomer->prev == this->headTable && this->numCustomers > 2){
+		// 	this->insertToHead(newCustomer);
+		// 	return;
+		// } 
 
 		// Get prev node of current customer
 		Customer *prevCustomer = curCustomer->prev;
@@ -107,10 +107,10 @@ public:
 		numCustomers++;
 	}
 	void insertToRight(Customer *newCustomer){
-		if (this->curCustomer->next == this->headTable && this->numCustomers > 2){
-			this->insertToTail(newCustomer);
-			return;
-		} 
+		// if (this->curCustomer->next == this->headTable && this->numCustomers > 2){
+		// 	this->insertToTail(newCustomer);
+		// 	return;
+		// } 
 
 		// Get prev node of current customer
 		Customer *nextCustomer = curCustomer->next;
@@ -118,7 +118,7 @@ public:
 		// Point current customer and prev to new customer, point new customer to cur and prev
 		curCustomer->next = newCustomer;
 		nextCustomer->prev = newCustomer;
-		newCustomer->next = curCustomer;
+		newCustomer->next = nextCustomer;
 		newCustomer->prev = curCustomer;
 
 		// Change current customer
