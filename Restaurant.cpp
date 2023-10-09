@@ -1,4 +1,4 @@
-// Hello World
+// Restaurant.cpp
 
 #include "main.h"
 
