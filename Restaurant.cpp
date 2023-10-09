@@ -1,4 +1,4 @@
-// Test push code
+// Something new
 // class circularTable : public Restaurant
 // {
 // protected:
