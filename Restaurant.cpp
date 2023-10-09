@@ -125,14 +125,15 @@ public:
 
 		// Add flag to new Customer
 		curCustomer = newCustomer;
+		// cout << "Insert to table: " << curCustomer->name << ' ' << curCustomer->energy << endl;
 
 		// Increase num of customers
 		numCustomers++;
 	}
 	void insertToTable(string name, int energy)
 	{
+		// cout << "Insert to table: " << name << ' ' << energy << endl;
 		// If restaurant just opened right now
-		// cout << "Insert to table\n";
 		if (numCustomers == 0 || !headTable)
 		{
 			if (energy != 0)
@@ -161,10 +162,10 @@ public:
 				}
 				else if (energy >= curCustomer->energy)
 				{
+					// cout << "Insert to table != 0: " << endl;
 					Customer *newCustomer = new Customer(name, energy, curCustomer, nullptr);
 
 					this->insertToTail(newCustomer);
-					// cout << "Insert to table != 0: " << curCustomer->next->name << endl;
 					// curCustomer->next = newCustomer;
 					// curCustomer = curCustomer->next;
 					// numCustomers++;
@@ -542,29 +543,7 @@ public:
 		// cout << MAXSIZE << endl;
 		this->insertToTable(name, energy);
 		// this->printTable();
-		// // If restaurant just opened right now
-		// if (numCustomers == 0 || !headTable){
-		// 	if (energy != 0) {
-		// 		Customer *cus = new Customer (name, energy, nullptr, nullptr);
-		// 		headTable = cus;
-		// 		temp = headTable;
-		// 		numCustomers++;
-		// 	}
-		// }
-		// else {
-		// 	if (energy == 0)
-		// 	{
-		// 		/* code */
-		// 	}
-		// 	else if (energy < 0) {
-		// 		Customer *cus = new Customer(name, energy, temp, nullptr);
-		// 		numCustomers++;
-		// 	}
-		// 	else if (energy > 0) {
-		// 		Customer *cus = new Customer(name, energy, nullptr, temp);
-		// 		numCustomers++;
-		// 	}
-		// }
+		// cout << this->numCustomers << endl;
 	}
 	void BLUE(int num)
 	{
