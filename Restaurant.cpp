@@ -73,16 +73,20 @@ public:
 	{
 		// cout << "Print table: " << headTable->next->name << endl;
 		Customer *temp = headTable;
-
-		while (temp->next != headTable)
-		{
-			cout << temp->name << '/' << temp->energy;
-			if (temp->next != nullptr)
-				cout << " -> ";
-			temp = temp->next;
+		// cout << headTable ->name << "/" << headTable->energy << endl;
+		// while (temp->next != headTable)
+		// {
+		// 	cout << temp->name << '/' << temp->energy;
+		// 	// if (temp->next != nullptr)
+		// 	// 	cout << " -> ";
+		// 	temp = temp->next;
+		// 	cout << endl;
+		// }
+		// cout  << temp->name << '/' << temp->energy;
+		for (int i = 1; i <= 4; i++){
+			cout << temp ->name << "/" << temp->energy << endl;
+			temp =  temp ->next;
 		}
-		cout  << temp->name << '/' << temp->energy;
-		cout << endl;
 	}
 
 	void insertToHead(Customer *newCustomer)
@@ -120,7 +124,7 @@ public:
 
 		// Connect old tail to new tail
 		lastCustomer->next = newCustomer;
-
+		
 		// Add flag to new Customer
 		curCustomer = newCustomer;
 
@@ -534,42 +538,39 @@ public:
 			cout << cus -> name << "-" << cus -> energy << endl;
 		}
 	}
+
+	void expansionKickOut(){
+		Customer *temp = headTable;
+		int sumJujutsuEnergy = 0;
+		int sumJureiEnergy = 0;
+		while (temp -> next != headTable){
+			if (temp -> energy > 0) sumJujutsuEnergy += temp -> energy;
+			else sumJureiEnergy += temp -> energy;
+		}
+		if (sumJujutsuEnergy > abs(sumJureiEnergy)){
+			while () {
+
+			}
+		}
+		else {
+			while () {
+
+			}
+		}
+	}
 	void RED(string name, int energy)
 	{
 		// cout << name << " " << energy << endl;
 		// cout << MAXSIZE << endl;
 		this->insertToTable(name, energy);
-		// this->printTable();
-		// // If restaurant just opened right now
-		// if (numCustomers == 0 || !headTable){
-		// 	if (energy != 0) {
-		// 		Customer *cus = new Customer (name, energy, nullptr, nullptr);
-		// 		headTable = cus;
-		// 		temp = headTable;
-		// 		numCustomers++;
-		// 	}
-		// }
-		// else {
-		// 	if (energy == 0)
-		// 	{
-		// 		/* code */
-		// 	}
-		// 	else if (energy < 0) {
-		// 		Customer *cus = new Customer(name, energy, temp, nullptr);
-		// 		numCustomers++;
-		// 	}
-		// 	else if (energy > 0) {
-		// 		Customer *cus = new Customer(name, energy, nullptr, temp);
-		// 		numCustomers++;
-		// 	}
-		// }
+		this->printTable();
 	}
 	void BLUE(int num)
 	{
+		cout << "blue " << num << endl;
 		// numAfterKick = numCustomers - num;
 		// kickOutCustomer(num);
 		// this->printTable();
-		cout << "blue " << num << endl;
 	}
 	void PURPLE()
 	{
@@ -577,9 +578,9 @@ public:
 	}
 	void REVERSAL()
 	{
+		cout << "reversal" << endl;
 		// reversalTable();
 		// this->printTable();
-		cout << "reversal" << endl;
 	}
 	void UNLIMITED_VOID()
 	{

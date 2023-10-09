@@ -43,5 +43,4 @@ co
 Thấy trên nó có mấy cái optiion không
 co
 CHọn 1 trong mấy cái đó, muốn giữ lại của mình thì chọn cái 1, cái 2 là cái từ git lấy về
-chọn lại đi
-làm tiếp các bước đi
+hinh nhu doi code cai ben .h customer thanh public het roi nen k can khai bao lai ben cpp nua thi phai
