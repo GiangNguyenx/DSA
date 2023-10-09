@@ -162,7 +162,7 @@ public:
 
 		// Connect old tail to new tail
 		lastCustomer->next = newCustomer;
-
+		
 		// Add flag to new Customer
 		curCustomer = newCustomer;
 		// cout << "Insert to table: " << curCustomer->name << ' ' << curCustomer->energy << endl;
@@ -577,6 +577,26 @@ public:
 			cout << cus -> name << "-" << cus -> energy << endl;
 		}
 	}
+
+	void expansionKickOut(){
+		Customer *temp = headTable;
+		int sumJujutsuEnergy = 0;
+		int sumJureiEnergy = 0;
+		while (temp -> next != headTable){
+			if (temp -> energy > 0) sumJujutsuEnergy += temp -> energy;
+			else sumJureiEnergy += temp -> energy;
+		}
+		if (sumJujutsuEnergy > abs(sumJureiEnergy)){
+			while () {
+
+			}
+		}
+		else {
+			while () {
+
+			}
+		}
+	}
 	void RED(string name, int energy)
 	{
 		// cout << name << " " << energy << endl;
@@ -587,10 +607,10 @@ public:
 	}
 	void BLUE(int num)
 	{
+		cout << "blue " << num << endl;
 		// numAfterKick = numCustomers - num;
 		// kickOutCustomer(num);
 		// this->printTable();
-		cout << "blue " << num << endl;
 	}
 	void PURPLE()
 	{
@@ -598,9 +618,9 @@ public:
 	}
 	void REVERSAL()
 	{
+		cout << "reversal" << endl;
 		// reversalTable();
 		// this->printTable();
-		cout << "reversal" << endl;
 	}
 	void UNLIMITED_VOID()
 	{
