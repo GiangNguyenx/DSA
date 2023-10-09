@@ -342,7 +342,7 @@ public:
 				return removedCustomer;
 			}
 		}
-		return nullptr;
+		return nullptr; // need fix
 	}
 	void orderOfCustomer(Customer *newCustomer)
 	{
