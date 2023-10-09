@@ -1,0 +1,47 @@
+tap test với xung đột đi
+để push 1 cái lên cho tập làm
+ty toi. dang trong tiet 
+
+
+commit -> push trư
+
+git add .
+git commit -m
+rồi
+
+git status -> mo file bi conflict len -> xoa phan bị conflict
+
+add lại rồi commit rồi push
+
+rồi, thử lại lần nữa đi, nãy phá lộn xíu
+
+0. add rồi commit rồi push
+1. git status, git pull
+2. Xóa phần conflict
+3. add rồi commit rồi push
+
+Rồi, làm đi
+Lại đi
+À quên
+Chưa pushs, hehe
+ua h lam gi
+Lam lai lan nua di
+Roi do xoa di
+
+Tu tu, co gi nua dau ma commit
+De tao cai nua, doi chut
+Roi do lai lan nua di, lai di
+
+Roi do, lan sau cu lam vay
+ua la no pull code xuong chua
+dau, no pull từ bước 1 rồi, bước 2 là xóa đấy, 1 là xóa cái trên github, 2 là xóa phần mình đang làm
+để làm lại cái nữa cho thấy
+Làm lại đi
+
+Thấy head không
+co
+Thấy trên nó có mấy cái optiion không
+co
+CHọn 1 trong mấy cái đó, muốn giữ lại của mình thì chọn cái 1, cái 2 là cái từ git lấy về
+chọn lại đi
+làm tiếp các bước đi
