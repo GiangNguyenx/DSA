@@ -73,22 +73,60 @@ public:
 	{
 		// cout << "Print table: " << headTable->next->name << endl;
 		Customer *temp = headTable;
-		// cout << headTable ->name << "/" << headTable->energy << endl;
-		// while (temp->next != headTable)
-		// {
-		// 	cout << temp->name << '/' << temp->energy;
-		// 	// if (temp->next != nullptr)
-		// 	// 	cout << " -> ";
-		// 	temp = temp->next;
-		// 	cout << endl;
-		// }
-		// cout  << temp->name << '/' << temp->energy;
-		for (int i = 1; i <= 4; i++){
-			cout << temp ->name << "/" << temp->energy << endl;
-			temp =  temp ->next;
+
+		while (temp->next != headTable)
+		{
+			cout << temp->name << '/' << temp->energy;
+			if (temp->next != nullptr)
+				cout << " -> ";
+			temp = temp->next;
 		}
+		cout  << temp->name << '/' << temp->energy;
+		cout << endl;
 	}
 
+	void insertToLeft(Customer *newCustomer){
+		if (this->curCustomer->prev == this->headTable && this->numCustomers > 2){
+			this->insertToHead(newCustomer);
+			return;
+		} 
+
+		// Get prev node of current customer
+		Customer *prevCustomer = curCustomer->prev;
+
+		// Point current customer and prev to new customer, point new customer to cur and prev
+		curCustomer->prev = newCustomer;
+		prevCustomer->next = newCustomer;
+		newCustomer->next = curCustomer;
+		newCustomer->prev = prevCustomer;
+
+		// Change current customer
+		curCustomer = newCustomer;
+
+		// Increse customer
+		numCustomers++;
+	}
+	void insertToRight(Customer *newCustomer){
+		if (this->curCustomer->next == this->headTable && this->numCustomers > 2){
+			this->insertToTail(newCustomer);
+			return;
+		} 
+
+		// Get prev node of current customer
+		Customer *nextCustomer = curCustomer->next;
+
+		// Point current customer and prev to new customer, point new customer to cur and prev
+		curCustomer->next = newCustomer;
+		nextCustomer->prev = newCustomer;
+		newCustomer->next = curCustomer;
+		newCustomer->prev = curCustomer;
+
+		// Change current customer
+		curCustomer = newCustomer;
+
+		// Increse customer
+		numCustomers++;
+	}
 	void insertToHead(Customer *newCustomer)
 	{
 		// Last element in list
@@ -127,14 +165,15 @@ public:
 		
 		// Add flag to new Customer
 		curCustomer = newCustomer;
+		// cout << "Insert to table: " << curCustomer->name << ' ' << curCustomer->energy << endl;
 
 		// Increase num of customers
 		numCustomers++;
 	}
 	void insertToTable(string name, int energy)
 	{
+		// cout << "Insert to table: " << name << ' ' << energy << endl;
 		// If restaurant just opened right now
-		// cout << "Insert to table\n";
 		if (numCustomers == 0 || !headTable)
 		{
 			if (energy != 0)
@@ -163,10 +202,10 @@ public:
 				}
 				else if (energy >= curCustomer->energy)
 				{
+					// cout << "Insert to table != 0: " << endl;
 					Customer *newCustomer = new Customer(name, energy, curCustomer, nullptr);
 
-					this->insertToTail(newCustomer);
-					// cout << "Insert to table != 0: " << curCustomer->next->name << endl;
+					this->insertToRight(newCustomer);
 					// curCustomer->next = newCustomer;
 					// curCustomer = curCustomer->next;
 					// numCustomers++;
@@ -176,7 +215,7 @@ public:
 					// cout << "\nEnergy < 0\n";
 					Customer *newCustomer = new Customer(name, energy, nullptr, curCustomer);
 
-					this->insertToHead(newCustomer);
+					this->insertToLeft(newCustomer);
 					// curCustomer->prev = cus;
 					// curCustomer = curCustomer->prev;
 					// numCustomers++;
@@ -564,6 +603,7 @@ public:
 		// cout << MAXSIZE << endl;
 		this->insertToTable(name, energy);
 		this->printTable();
+		// cout << this->numCustomers << endl;
 	}
 	void BLUE(int num)
 	{
