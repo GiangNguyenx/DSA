@@ -114,13 +114,14 @@ public:
 		// cout << "Print table: " << headTable->next->name << endl;
 		Customer *temp = headTable;
 
-		while (temp)
+		while (temp->next != headTable)
 		{
 			cout << temp->name << '/' << temp->energy;
 			if (temp->next != nullptr)
 				cout << " -> ";
 			temp = temp->next;
 		}
+		cout  << temp->name << '/' << temp->energy;
 		cout << endl;
 	}
 
@@ -174,9 +175,16 @@ public:
 		{
 			if (energy != 0)
 			{
-				Customer *cus = new Customer(name, energy, nullptr, nullptr);
-				headTable = cus;
+				Customer *customer = new Customer(name, energy, nullptr, nullptr);
+
+				// Point to itself
+				customer->next = customer;
+				customer->prev = customer;
+
+				// New head
+				headTable = customer;
 				curCustomer = headTable;
+			
 				numCustomers++;
 			}
 		}
