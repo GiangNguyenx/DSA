@@ -579,30 +579,68 @@ public:
 	}
 
 	void expansionKickOut(){
-		Customer *temp = headTable;
+		Customer *temp1 = headTable;
+		Customer *temp2 = headOrderQ;
 		int sumJujutsuEnergy = 0;
 		int sumJureiEnergy = 0;
-		while (temp -> next != headTable){
-			if (temp -> energy > 0) sumJujutsuEnergy += temp -> energy;
-			else sumJureiEnergy += temp -> energy;
+		while (temp1 -> next != headTable){
+			if (temp1 -> energy > 0) sumJujutsuEnergy += temp1 -> energy;
+			else sumJureiEnergy += temp1 -> energy;
+			temp1 = temp1 -> next;
 		}
 		if (sumJujutsuEnergy > abs(sumJureiEnergy)){
-			while () {
-
+			for (int i = 1; i <= numCustomers; i++) {
+				if (temp2 -> energy < 0){
+					Customer *temp3 = headTable;
+					while (temp3 -> next ! headTable) {
+						if (temp3 -> name == temp2 -> name){
+							cout << temp3 -> name << "-" << temp3 -> energy << endl;
+							Customer *temp = temp3;
+							temp -> next = temp3 -> next;
+							temp -> prev = temp3 -> prev;
+							delete temp3;
+							break;
+						}
+						else {
+							temp3 = temp3 -> next;
+						}
+					}
+					temp2 = temp2 -> next;
+				}
+				else temp2 = temp2 -> next;
 			}
 		}
-		else {
-			while () {
-
+		else if (sumJujutsuEnergy < abs(sumJureiEnergy)) {
+			for (int i = 1; i <= numCustomers; i++) {
+				if (temp2 -> energy > 0){
+					Customer *temp3 = headTable;
+					while (temp3 -> next ! headTable) {
+						if (temp3 -> name == temp2 -> name){
+							cout << temp3 -> name << "-" << temp3 -> energy << endl;
+							Customer *temp = temp3;
+							temp -> next = temp3 -> next;
+							temp -> prev = temp3 -> prev;
+							
+							delete temp3;
+							break;
+						}
+						else {
+							temp3 = temp3 -> next;
+						}
+					}
+					temp2 = temp2 -> next;
+				}
+				else temp2 = temp2 -> next;
 			}
 		}
 	}
+	void 
 	void RED(string name, int energy)
 	{
 		// cout << name << " " << energy << endl;
 		// cout << MAXSIZE << endl;
 		this->insertToTable(name, energy);
-		this->printTable();
+		// this->printTable();
 		// cout << this->numCustomers << endl;
 	}
 	void BLUE(int num)
