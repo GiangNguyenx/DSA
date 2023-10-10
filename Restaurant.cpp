@@ -97,7 +97,29 @@ public:
 		}
 		else
 		{
-			insertToLeft(newCustomer);
+			if (numCustomers != MAXSIZE - 1)
+			{
+				insertToLeft(newCustomer);
+			}
+			else {
+				// if (curCustomer == headTable){
+				// 	curCustomer -> prev = newCustomer;
+				// 	newCustomer -> next = curCustomer;
+				// 	newCustomer -> next = headTable;
+				// 	curCustomer = newCustomer;
+				// 	numCustomers++;
+				// }
+				// else {
+				// 	insertToRight(newCustomer);
+				// 	Customer *temp = headTable;
+				// 	temp = temp -> next;
+				// 	while (temp != headTable)
+				// 	{
+				// 		temp = temp -> next;
+				// 	}
+				// 	temp -> next = headTable;
+				// 	headTable -> prev = temp;
+				// }
 		}
 	}
 	void printTable()
