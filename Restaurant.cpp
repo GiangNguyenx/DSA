@@ -40,6 +40,31 @@ private:
 public:
 	imp_res() : headQueue(nullptr), tailQueue(nullptr), curCustomer(nullptr), headOrderQ(nullptr), tailOrderQ(nullptr), numCustomers(0), currSizeQueue(0), jujutsu(0), jurei(0), numAfterKick(0) {}
 
+	Customer* findMaxDifference(Customer *newCustomer, int& rootDiff){
+		Customer *temp = curCustomer;
+		Customer *flagCustomer = temp;
+		int rootCurDifference = newCustomer->energy - temp->energy;
+		int curDifference = abs(rootCurDifference);
+		int maxRes = curDifference;
+
+		temp = temp->next;
+
+		while (temp != curCustomer){
+			rootCurDifference = newCustomer->energy - temp->energy;
+			curDifference = abs(rootCurDifference);
+
+			if (curDifference > maxRes){
+				maxRes = curDifference;
+				flagCustomer = temp;
+			}
+
+			temp = temp->next;
+		}
+
+		rootDiff = rootCurDifference;
+		// cout << flagCustomer->name << endl;
+		return flagCustomer;
+	}
 	void findMaxDifference(Customer *newCustomer)
 	{
 		Customer *temp = curCustomer;
@@ -65,7 +90,7 @@ public:
 		{
 			if (numCustomers != MAXSIZE - 1)
 			{
-				insertToRight(newCustomer);
+				insertToRight(newCustomer, curCustomer);
 			}
 			else {
 				if (curCustomer -> next == curCustomer){
@@ -76,8 +101,8 @@ public:
 					numCustomers++;
 				}
 				else {
-					insertToRight(newCustomer);
-					Customer *temp = curCustomer;
+					insertToRight(newCustomer, curCustomer);
+					Customer *temp = headTable;
 					temp = temp -> next;
 					while (temp != curCustomer)
 					{
@@ -99,7 +124,7 @@ public:
 		{
 			if (numCustomers != MAXSIZE - 1)
 			{
-				insertToLeft(newCustomer);
+				insertToLeft(newCustomer, curCustomer);
 			}
 			else {
 				// if (curCustomer == curCustomer){
@@ -125,7 +150,7 @@ public:
 	}
 	void printTable()
 	{
-		// cout << "Print table: " << curCustomer->next->name << endl;
+		// cout << "Print table: " << headTable->next->name << endl;
 		Customer *temp = curCustomer;
 
 		while (temp->next != curCustomer)
@@ -139,41 +164,32 @@ public:
 		cout << endl;
 	}
 
-	void insertToLeft(Customer *newCustomer){
-		// if (this->curCustomer->prev == this->curCustomer && this->numCustomers > 2){
-		// 	this->insertToHead(newCustomer);
-		// 	return;
-		// } 
-
+	void insertToLeft(Customer *newCustomer, Customer *flagPostion){
 		// Get prev node of current customer
-		Customer *prevCustomer = curCustomer->prev;
+		Customer *prevCustomer = flagPostion->prev;
 
 		// Point current customer and prev to new customer, point new customer to cur and prev
-		curCustomer->prev = newCustomer;
+		flagPostion->prev = newCustomer;
 		prevCustomer->next = newCustomer;
-		newCustomer->next = curCustomer;
+		newCustomer->next = flagPostion;
 		newCustomer->prev = prevCustomer;
 
 		// Change current customer
 		curCustomer = newCustomer;
 
+		cout << curCustomer->next->name << endl;
 		// Increse customer
 		numCustomers++;
 	}
-	void insertToRight(Customer *newCustomer){
-		// if (this->curCustomer->next == this->curCustomer && this->numCustomers > 2){
-		// 	this->insertToTail(newCustomer);
-		// 	return;
-		// } 
-
+	void insertToRight(Customer *newCustomer, Customer *flagPostion){
 		// Get prev node of current customer
-		Customer *nextCustomer = curCustomer->next;
+		Customer *nextCustomer = flagPostion->next;
 
 		// Point current customer and prev to new customer, point new customer to cur and prev
-		curCustomer->next = newCustomer;
+		flagPostion->next = newCustomer;
 		nextCustomer->prev = newCustomer;
 		newCustomer->next = nextCustomer;
-		newCustomer->prev = curCustomer;
+		newCustomer->prev = flagPostion;
 
 		// Change current customer
 		curCustomer = newCustomer;
@@ -226,28 +242,30 @@ public:
 	// }
 	void insertToTable(string name, int energy)
 	{
+		Customer *newCustomer = new Customer(name, energy, nullptr, nullptr);
+		// cout << numCustomers << ' ' << MAXSIZE  << endl;
 		// cout << "Insert to table: " << name << ' ' << energy << endl;
+
 		// If restaurant just opened right now
 		if (numCustomers == 0 || !curCustomer)
 		{
 			if (energy != 0)
 			{
-				Customer *customer = new Customer(name, energy, nullptr, nullptr);
-
 				// Point to itself
-				customer->next = customer;
-				customer->prev = customer;
+				newCustomer->next = newCustomer;
+				newCustomer->prev = newCustomer;
 
 				// New head
-				curCustomer = customer;
-				curCustomer = curCustomer;
+				curCustomer = newCustomer;
+				// curCustomer = headTable;
 			
 				numCustomers++;
 			}
 		}
-		else
+		else if (numCustomers < MAXSIZE)
 		{
-			if (numCustomers < MAXSIZE / 2)
+			// cout << numCustomers << ' ' << MAXSIZE  << endl;
+			if (numCustomers < ceil(float(MAXSIZE) / 2))
 			{
 				if (energy == 0)
 				{
@@ -257,29 +275,28 @@ public:
 				else if (energy >= curCustomer->energy)
 				{
 					// cout << "Insert to table != 0: " << endl;
-					Customer *newCustomer = new Customer(name, energy, curCustomer, nullptr);
 
-					this->insertToRight(newCustomer);
-					// curCustomer->next = newCustomer;
-					// curCustomer = curCustomer->next;
-					// numCustomers++;
+					this->insertToRight(newCustomer, curCustomer);
 				}
 				else if (energy < curCustomer->energy)
 				{
 					// cout << "\nEnergy < 0\n";
-					Customer *newCustomer = new Customer(name, energy, nullptr, curCustomer);
-
-					this->insertToLeft(newCustomer);
-					// curCustomer->prev = cus;
-					// curCustomer = curCustomer->prev;
-					// numCustomers++;
+					this->insertToLeft(newCustomer, curCustomer);
 				}
 			}
-			else if (numCustomers >= MAXSIZE / 2)
+			else if (numCustomers >= ceil(float(MAXSIZE) / 2))
 			{
-				Customer *cus = new Customer(name, energy, nullptr, nullptr);
-				if (cus -> energy)
-				this->findMaxDifference(cus);
+				int diff = 0;
+				Customer *positionToAdd = this->findMaxDifference(newCustomer, diff);
+
+				// cout << positionToAdd->name << " " << positionToAdd->energy << " " << diff << endl;
+				
+				if (diff >= 0){
+					this->insertToRight(newCustomer, positionToAdd);
+				}
+				else if (diff < 0){
+					this->insertToLeft(newCustomer, positionToAdd);
+				}
 				// if (numCustomers == MAXSIZE - 1)
 				// {
 				// 	Customer *temp = curCustomer;
@@ -296,44 +313,47 @@ public:
 				// }
 			}
 		}
-		if (numCustomers >= MAXSIZE)
+
+		else if (numCustomers >= MAXSIZE)
 		{
-			Customer *cus = new Customer(name, energy, nullptr, nullptr);
-			addCustomerInQueue(cus);
+			// Customer *cus = new Customer(name, energy, nullptr, nullptr);
+			addCustomerInQueue(newCustomer);
 		}
-		if (currSizeQueue == 0)
-		{
-			return;
-		}
-		else
-		{
-			Customer *cus = FIFO();
-			if (numAfterKick < MAXSIZE / 2)
-			{
-				if (cus -> energy >= curCustomer -> energy){
-					this->insertToLeft(cus);
-				}
-				else this->insertToRight(cus);
-			}
-			if (numAfterKick > MAXSIZE / 2){
-				this -> findMaxDifference(cus);
-				if (numCustomers == MAXSIZE - 1)
-				{
-					Customer *temp = curCustomer;
-					while (!temp)
-					{
-						if (temp)
-						{
-							temp->next = curCustomer;
-							curCustomer->prev = temp;
-							break;
-						}
-						temp = temp->next;
-					}
-				}
-				numCustomers++;
-			}
-		}
+
+		
+		// if (currSizeQueue == 0)
+		// {
+		// 	return;
+		// }
+		// else
+		// {
+		// 	Customer *cus = FIFO();
+		// 	if (numAfterKick < MAXSIZE / 2)
+		// 	{
+		// 		if (cus -> energy >= curCustomer -> energy){
+		// 			this->insertToTail(cus);
+		// 		}
+		// 		else this->insertToHead(cus);
+		// 	}
+		// 	if (numAfterKick > MAXSIZE / 2){
+		// 		this -> findMaxDifference(cus);
+		// 		if (numCustomers == MAXSIZE - 1)
+		// 		{
+		// 			Customer *temp = headTable;
+		// 			while (!temp)
+		// 			{
+		// 				if (temp)
+		// 				{
+		// 					temp->next = headTable;
+		// 					headTable->prev = temp;
+		// 					break;
+		// 				}
+		// 				temp = temp->next;
+		// 			}
+		// 		}
+		// 		numCustomers++;
+		// 	}
+		// }
 	}
 	void checkNameOfCustomer(string name, int energy)
 	{
