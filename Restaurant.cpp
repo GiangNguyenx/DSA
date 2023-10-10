@@ -122,6 +122,7 @@ public:
 				// }
 		}
 	}
+	}
 	void printTable()
 	{
 		// cout << "Print table: " << headTable->next->name << endl;
@@ -277,6 +278,7 @@ public:
 			else if (numCustomers >= MAXSIZE / 2)
 			{
 				Customer *cus = new Customer(name, energy, nullptr, nullptr);
+				if (cus -> energy)
 				this->findMaxDifference(cus);
 				// if (numCustomers == MAXSIZE - 1)
 				// {
@@ -631,36 +633,47 @@ public:
 	}
 
 	// void expansionKickOut(){
+	// 	Customer *temp = headTable -> prev;
 	// 	Customer *temp1 = headTable;
 	// 	Customer *temp2 = headOrderQ;
 	// 	int sumJujutsuEnergy = 0;
 	// 	int sumJureiEnergy = 0;
+	// 	if (numCustomers == 0 || jujutsu == 0 || jurei == 0){
+	// 		return;
+	// 	}
 	// 	while (temp1 -> next != headTable){
 	// 		if (temp1 -> energy > 0) sumJujutsuEnergy += temp1 -> energy;
 	// 		else sumJureiEnergy += temp1 -> energy;
 	// 		temp1 = temp1 -> next;
 	// 	}
 	// 	if (sumJujutsuEnergy > abs(sumJureiEnergy)){
-	// 		for (int i = 1; i <= numCustomers; i++) {
-	// 			if (temp2 -> energy < 0){
-	// 				Customer *temp3 = headTable;
-	// 				while (temp3 -> next ! headTable) {
-	// 					if (temp3 -> name == temp2 -> name){
-	// 						cout << temp3 -> name << "-" << temp3 -> energy << endl;
-	// 						Customer *temp = temp3;
-	// 						temp -> next = temp3 -> next;
-	// 						temp -> prev = temp3 -> prev;
-	// 						delete temp3;
-	// 						break;
+	// 		// if (headTable -> energy < 0) 
+	// 		// {
+	// 		// 	temp -> prev -> next = temp -> next;
+	// 		// 	temp -> next -> prev = temp -> prev;
+	// 		// 	headTable = temp -> prev;
+	// 		// 	curCustomer = headTable;
+	// 		// 	cout << temp -> energy << "-" << temp -> name << endl;
+	// 		// 	delete temp;
+	// 		// }
+	// 		// temp2 = temp2 -> next;
+	// 		for (int i = 1; i <= numCustomers; i++){
+	// 			do {
+	// 				Customer *nextCustomer = temp -> next;
+	// 				if (temp -> energy < 0 && temp -> name == temp2 ->name)
+	// 				{
+	// 					Customer *prevCustomer = temp;
+	// 					while (prevCustomer -> next != temp)
+	// 					{
+	// 						prevCustomer = prevCustomer -> next;
 	// 					}
-	// 					else {
-	// 						temp3 = temp3 -> next;
-	// 					}
+	// 					prevCustomer -> next = nextCustomer;
+	// 					delete temp;
 	// 				}
-	// 				temp2 = temp2 -> next;
-	// 			}
-	// 			else temp2 = temp2 -> next;
-	// 		}
+	// 				temp = nextCustomer;
+	// 			} while (temp != headTable);
+	// 			temp2 = temp2 -> next;
+	// 		}			
 	// 	}
 	// 	else if (sumJujutsuEnergy < abs(sumJureiEnergy)) {
 	// 		for (int i = 1; i <= numCustomers; i++) {
