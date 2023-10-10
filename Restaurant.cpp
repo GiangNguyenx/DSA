@@ -43,30 +43,61 @@ public:
 	void findMaxDifference(Customer *newCustomer)
 	{
 		Customer *temp = headTable;
-		int curDifference = 0;
+		int curDifference = headTable -> energy;
+		curDifference = abs((newCustomer->energy) - (temp->energy));
 		Customer *flagCustomer = temp;
 		int maxRes = max(maxRes, curDifference);
-		while (temp != nullptr)
+		temp = temp -> next;
+		while (temp -> next != headTable -> next)
 		{
 			curDifference = abs((newCustomer->energy) - (temp->energy));
 			if (curDifference > maxRes)
 			{
+				maxRes = max(maxRes, curDifference);
 				flagCustomer = temp;
 			}
 			temp = temp->next;
 		}
+		cout << maxRes << endl;
 		int unsignedMaxRes = (newCustomer->energy) - (flagCustomer->energy);
+		curCustomer = flagCustomer;
 		if (unsignedMaxRes > 0)
 		{
-			newCustomer->next = flagCustomer->next;
-			newCustomer->prev = flagCustomer;
-			flagCustomer->next = newCustomer;
+			if (numCustomers != MAXSIZE - 1)
+			{
+				insertToRight(newCustomer);
+			}
+			else {
+				if (curCustomer -> next == headTable){
+					curCustomer -> next = newCustomer;
+					newCustomer -> prev = curCustomer;
+					newCustomer -> next = headTable;
+					curCustomer = newCustomer;
+					numCustomers++;
+				}
+				else {
+					insertToRight(newCustomer);
+					Customer *temp = headTable;
+					temp = temp -> next;
+					while (temp != headTable)
+					{
+						temp = temp -> next;
+					}
+					temp -> next = headTable;
+					headTable -> prev = temp;
+				}
+				// Customer *nextCustomer = curCustomer->next;
+				// curCustomer->next = newCustomer;
+				// nextCustomer->prev = newCustomer;
+				// newCustomer->next = nextCustomer;
+				// newCustomer->prev = curCustomer;
+				// curCustomer = newCustomer;
+				// numCustomers++;
+			}
 		}
 		else
 		{
-			newCustomer->prev = flagCustomer->prev;
-			newCustomer->next = flagCustomer;
-			flagCustomer->prev = newCustomer;
+			insertToLeft(newCustomer);
 		}
 	}
 	void printTable()
@@ -221,25 +252,24 @@ public:
 					// numCustomers++;
 				}
 			}
-			else
+			else if (numCustomers >= MAXSIZE / 2)
 			{
 				Customer *cus = new Customer(name, energy, nullptr, nullptr);
 				this->findMaxDifference(cus);
-				if (numCustomers == MAXSIZE - 1)
-				{
-					Customer *temp = headTable;
-					while (!temp)
-					{
-						if (temp)
-						{
-							temp->next = headTable;
-							headTable->prev = temp;
-							break;
-						}
-						temp = temp->next;
-					}
-				}
-				numCustomers++;
+				// if (numCustomers == MAXSIZE - 1)
+				// {
+				// 	Customer *temp = headTable;
+				// 	while (!temp)
+				// 	{
+				// 		if (temp)
+				// 		{
+				// 			temp->next = headTable;
+				// 			headTable->prev = temp;
+				// 			break;
+				// 		}
+				// 		temp = temp->next;
+				// 	}
+				// }
 			}
 		}
 		if (numCustomers >= MAXSIZE)
@@ -578,69 +608,68 @@ public:
 		}
 	}
 
-	void expansionKickOut(){
-		Customer *temp1 = headTable;
-		Customer *temp2 = headOrderQ;
-		int sumJujutsuEnergy = 0;
-		int sumJureiEnergy = 0;
-		while (temp1 -> next != headTable){
-			if (temp1 -> energy > 0) sumJujutsuEnergy += temp1 -> energy;
-			else sumJureiEnergy += temp1 -> energy;
-			temp1 = temp1 -> next;
-		}
-		if (sumJujutsuEnergy > abs(sumJureiEnergy)){
-			for (int i = 1; i <= numCustomers; i++) {
-				if (temp2 -> energy < 0){
-					Customer *temp3 = headTable;
-					while (temp3 -> next ! headTable) {
-						if (temp3 -> name == temp2 -> name){
-							cout << temp3 -> name << "-" << temp3 -> energy << endl;
-							Customer *temp = temp3;
-							temp -> next = temp3 -> next;
-							temp -> prev = temp3 -> prev;
-							delete temp3;
-							break;
-						}
-						else {
-							temp3 = temp3 -> next;
-						}
-					}
-					temp2 = temp2 -> next;
-				}
-				else temp2 = temp2 -> next;
-			}
-		}
-		else if (sumJujutsuEnergy < abs(sumJureiEnergy)) {
-			for (int i = 1; i <= numCustomers; i++) {
-				if (temp2 -> energy > 0){
-					Customer *temp3 = headTable;
-					while (temp3 -> next ! headTable) {
-						if (temp3 -> name == temp2 -> name){
-							cout << temp3 -> name << "-" << temp3 -> energy << endl;
-							Customer *temp = temp3;
-							temp -> next = temp3 -> next;
-							temp -> prev = temp3 -> prev;
+	// void expansionKickOut(){
+	// 	Customer *temp1 = headTable;
+	// 	Customer *temp2 = headOrderQ;
+	// 	int sumJujutsuEnergy = 0;
+	// 	int sumJureiEnergy = 0;
+	// 	while (temp1 -> next != headTable){
+	// 		if (temp1 -> energy > 0) sumJujutsuEnergy += temp1 -> energy;
+	// 		else sumJureiEnergy += temp1 -> energy;
+	// 		temp1 = temp1 -> next;
+	// 	}
+	// 	if (sumJujutsuEnergy > abs(sumJureiEnergy)){
+	// 		for (int i = 1; i <= numCustomers; i++) {
+	// 			if (temp2 -> energy < 0){
+	// 				Customer *temp3 = headTable;
+	// 				while (temp3 -> next ! headTable) {
+	// 					if (temp3 -> name == temp2 -> name){
+	// 						cout << temp3 -> name << "-" << temp3 -> energy << endl;
+	// 						Customer *temp = temp3;
+	// 						temp -> next = temp3 -> next;
+	// 						temp -> prev = temp3 -> prev;
+	// 						delete temp3;
+	// 						break;
+	// 					}
+	// 					else {
+	// 						temp3 = temp3 -> next;
+	// 					}
+	// 				}
+	// 				temp2 = temp2 -> next;
+	// 			}
+	// 			else temp2 = temp2 -> next;
+	// 		}
+	// 	}
+	// 	else if (sumJujutsuEnergy < abs(sumJureiEnergy)) {
+	// 		for (int i = 1; i <= numCustomers; i++) {
+	// 			if (temp2 -> energy > 0){
+	// 				Customer *temp3 = headTable;
+	// 				while (temp3 -> next ! headTable) {
+	// 					if (temp3 -> name == temp2 -> name){
+	// 						cout << temp3 -> name << "-" << temp3 -> energy << endl;
+	// 						Customer *temp = temp3;
+	// 						temp -> next = temp3 -> next;
+	// 						temp -> prev = temp3 -> prev;
 							
-							delete temp3;
-							break;
-						}
-						else {
-							temp3 = temp3 -> next;
-						}
-					}
-					temp2 = temp2 -> next;
-				}
-				else temp2 = temp2 -> next;
-			}
-		}
-	}
-	void 
+	// 						delete temp3;
+	// 						break;
+	// 					}
+	// 					else {
+	// 						temp3 = temp3 -> next;
+	// 					}
+	// 				}
+	// 				temp2 = temp2 -> next;
+	// 			}
+	// 			else temp2 = temp2 -> next;
+	// 		}
+	// 	}
+	
 	void RED(string name, int energy)
 	{
 		// cout << name << " " << energy << endl;
 		// cout << MAXSIZE << endl;
 		this->insertToTable(name, energy);
-		// this->printTable();
+		this->printTable();
 		// cout << this->numCustomers << endl;
 	}
 	void BLUE(int num)
