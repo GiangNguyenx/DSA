@@ -441,7 +441,17 @@ public:
 		Customer *temp2 = curCustomer;
 		Customer *temp3 = curCustomer;
 		Customer *temp4 = curCustomer;
-		while (count->next != curCustomer)
+		if (numCustomers == 0 || numCustomers == 1){
+			return;
+		}
+		if (curCustomer -> prev ->energy > 0) {
+			jujutsu++;
+		}
+		else 
+		{
+			jurei++;
+		}
+		while (count -> next != curCustomer)
 		{
 			if (count->energy > 0)
 			{
@@ -451,6 +461,7 @@ public:
 				jurei++;
 			count = count->next;
 		}
+		cout << jujutsu << " " << jurei << endl;
 		while (temp2->energy > 0)
 		{
 			if (curCustomer->energy < 0)
@@ -458,14 +469,13 @@ public:
 			else
 				temp2 = temp2->prev;
 		}
+		temp1 = temp1 -> next;
 		while (temp1->energy > 0)
 		{
-			if (curCustomer->energy < 0)
-				temp1 = temp1->next;
-			else
-				temp1 = temp1->next;
+			if (temp1 -> energy < 0) break;
+			temp1 = temp1->next;
 		}
-		if (jurei > 0)
+		if (jurei > 0 && jurei != 1)
 		{
 			while (jurei != 0)
 			{
@@ -474,12 +484,12 @@ public:
 					this -> swapInfo(temp1, temp2);
 					jurei -= 2;
 					temp1 = temp1->next;
-					temp2 = temp2->next;
+					temp2 = temp2->prev;
 				}
 				else if (temp1->energy > 0 && temp2->energy > 0)
 				{
 					temp1 = temp1->next;
-					temp2 = temp2->next;
+					temp2 = temp2->prev;
 				}
 				else if (temp1->energy > 0 && temp2->energy < 0)
 				{
@@ -487,7 +497,7 @@ public:
 				}
 				else
 				{
-					temp2 = temp2->next;
+					temp2 = temp2->prev;
 				}
 				if (jurei == 1)
 					break;
@@ -500,36 +510,35 @@ public:
 			else
 				temp4 = temp4->prev;
 		}
+		temp3 = temp3 -> next;
 		while (temp3->energy < 0)
 		{
-			if (curCustomer->energy > 0)
-				temp3 = temp3->next;
-			else
-				temp3 = temp3->next;
+			if (temp3 -> energy > 0) break;
+			temp3 = temp3->next;
 		}
-		if (jujutsu > 0)
+		if (jujutsu > 0 && jujutsu != 1)
 		{
 			while (jujutsu != 0)
 			{
 				if (temp3->energy > 0 && temp4->energy > 0)
 				{
 					this -> swapInfo(temp3, temp4);
-					jurei -= 2;
+					jujutsu -= 2;
 					temp3 = temp3->next;
-					temp4 = temp4->next;
+					temp4 = temp4->prev;
 				}
-				else if (temp3->energy > 0 && temp4->energy > 0)
+				else if (temp3->energy < 0 && temp4->energy < 0)
 				{
 					temp3 = temp3->next;
-					temp4 = temp4->next;
+					temp4 = temp4->prev;
 				}
-				else if (temp3->energy > 0 && temp4->energy < 0)
+				else if (temp3->energy < 0 && temp4->energy > 0)
 				{
 					temp3 = temp3->next;
 				}
 				else
 				{
-					temp4 = temp4->next;
+					temp4 = temp4->prev;
 				}
 				if (jujutsu == 1)
 					break;
@@ -660,8 +669,8 @@ public:
 	{
 		cout << "blue " << num << endl;
 		// numAfterKick = numCustomers - num;
-		kickOutCustomer(num);
-		this->printTable();
+		// kickOutCustomer(num);
+		// this->printTable();
 	}
 	void PURPLE()
 	{
@@ -670,8 +679,8 @@ public:
 	void REVERSAL()
 	{
 		cout << "reversal" << endl;
-		// reversalTable();
-		// this->printTable();
+		reversalTable();
+		this->printTable();
 	}
 	void UNLIMITED_VOID()
 	{
