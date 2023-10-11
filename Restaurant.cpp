@@ -218,6 +218,8 @@ public:
 				// curCustomer = headTable;
 			
 				numCustomers++;
+
+				orderOfCustomer(name, energy);
 			}
 		}
 		else if (numCustomers < MAXSIZE)
@@ -256,6 +258,8 @@ public:
 					this->insertToLeft(newCustomer, positionToAdd);
 				}
 			}
+
+			orderOfCustomer(name, energy);
 		}
 
 		else if (numCustomers >= MAXSIZE)
@@ -383,44 +387,86 @@ public:
 			tailOrderQ = newCustomer;
 			return;
 		}
+		
 		tailOrderQ -> next = newCustomer;
 		newCustomer -> prev = tailOrderQ;
 		tailOrderQ = newCustomer;
+	}
+
+	void deleteCustomer(int numToDelete, Customer *kickedCustomer){
+		if (!curCustomer) return; //
+
+		Customer *temp = curCustomer;
+		Customer *prev1 = nullptr;
+
+		while (temp->name != kickedCustomer->name){
+			if (temp->next == curCustomer) return; // break?
+
+			prev1 = temp;
+			temp = temp->next;
+		}
+
+		if (temp->next == curCustomer && prev1 == nullptr){
+			curCustomer = nullptr;
+			delete temp;
+			return;
+		}
+
+		if (temp == curCustomer){
+			prev1 = curCustomer->prev;
+			curCustomer = curCustomer->next;
+			prev1->next = curCustomer;
+			delete temp;
+		}
+		else if (temp->next == curCustomer){
+			prev1->next = curCustomer;
+			curCustomer->prev = prev1;
+			delete temp;
+		}
+		else {
+			Customer *nextTemp = temp->next;
+
+			prev1->next = nextTemp;
+			nextTemp->prev = prev1;
+			delete temp;
+		}
 	}
 	void kickOutCustomer(int num)
 	{
 		// numAfterKick = numCustomers;
 		Customer *temp1 = headOrderQ;
 		Customer *temp2 = curCustomer;
-		if (num >= numCustomers)
+		if (num >= numCustomers || num >= MAXSIZE)
 		{
 			num = numCustomers;
 		}
 		if (numCustomers == 0){
 			return;
 		}
-		for (int i = 1; i <= num; i++)
+		for (int i = 0; i < num; i++)
 		{
-			while (temp2->next != curCustomer)
-			{
-				Customer *temp = temp2 -> next;
-				if (temp2 -> name == temp1 -> name && temp2 -> energy == temp1 ->energy)
-				{
-					temp2 -> prev -> next = temp2 -> next;
-					temp2 -> next -> prev = temp2 -> prev;
-					if (temp2 -> energy > 0) 
-					{
-						curCustomer = temp2 -> next;
-					}
-					else 
-					{
-						curCustomer = temp2 -> prev;
-					}
-					delete temp2; 
-					break;
-				}
-				else temp2 = temp;
-			}
+			// cout << temp1->name << endl;
+			this->deleteCustomer(num, temp1);
+			// while (temp2->next != curCustomer)
+			// {
+			// 	Customer *temp = temp2 -> next;
+			// 	if (temp2 -> name == temp1 -> name && temp2 -> energy == temp1 ->energy)
+			// 	{
+			// 		temp2 -> prev -> next = temp2 -> next;
+			// 		temp2 -> next -> prev = temp2 -> prev;
+			// 		if (temp2 -> energy > 0) 
+			// 		{
+			// 			curCustomer = temp2 -> next;
+			// 		}
+			// 		else 
+			// 		{
+			// 			curCustomer = temp2 -> prev;
+			// 		}
+			// 		delete temp2; 
+			// 		break;
+			// 	}
+			// 	else temp2 = temp;
+			// }
 			if (temp1 == tailOrderQ) break; 
 			temp1 = temp1->next;
 		}
@@ -669,8 +715,8 @@ public:
 	{
 		cout << "blue " << num << endl;
 		// numAfterKick = numCustomers - num;
-		// kickOutCustomer(num);
-		// this->printTable();
+		kickOutCustomer(num);
+		this->printTable();
 	}
 	void PURPLE()
 	{
