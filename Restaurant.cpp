@@ -102,7 +102,7 @@ public:
 				}
 				else {
 					insertToRight(newCustomer, curCustomer);
-					Customer *temp = headTable;
+					Customer *temp = curCustomer;
 					temp = temp -> next;
 					while (temp != curCustomer)
 					{
@@ -197,49 +197,7 @@ public:
 		// Increse customer
 		numCustomers++;
 	}
-	// void insertToHead(Customer *newCustomer)
-	// {
-	// 	// Last element in list
-	// 	Customer *lastCustomer = curCustomer->prev;
 
-	// 	// Connect old head to new head
-	// 	curCustomer->prev = newCustomer;
-	// 	newCustomer->next = curCustomer;
-
-	// 	// Connect new head to current tail
-	// 	newCustomer->prev = lastCustomer;
-	// 	lastCustomer->next = newCustomer;
-
-	// 	// Change new head
-	// 	curCustomer = newCustomer;
-
-	// 	// Increase num of customers
-	// 	numCustomers++;
-	// }
-	// void insertToTail(Customer *newCustomer)
-	// {
-	// 	// Last element in list
-	// 	Customer *lastCustomer = curCustomer->prev;
-
-	// 	// Connect to head
-	// 	newCustomer->next = curCustomer;
-
-	// 	// Connect prev to old tail
-	// 	newCustomer->prev = lastCustomer;
-
-	// 	// Connect to new tail
-	// 	curCustomer->prev = newCustomer;
-
-	// 	// Connect old tail to new tail
-	// 	lastCustomer->next = newCustomer;
-		
-	// 	// Add flag to new Customer
-	// 	curCustomer = newCustomer;
-	// 	// cout << "Insert to table: " << curCustomer->name << ' ' << curCustomer->energy << endl;
-
-	// 	// Increase num of customers
-	// 	numCustomers++;
-	// }
 	void insertToTable(string name, int energy)
 	{
 		Customer *newCustomer = new Customer(name, energy, nullptr, nullptr);
@@ -297,20 +255,6 @@ public:
 				else if (diff < 0){
 					this->insertToLeft(newCustomer, positionToAdd);
 				}
-				// if (numCustomers == MAXSIZE - 1)
-				// {
-				// 	Customer *temp = curCustomer;
-				// 	while (!temp)
-				// 	{
-				// 		if (temp)
-				// 		{
-				// 			temp->next = curCustomer;
-				// 			curCustomer->prev = temp;
-				// 			break;
-				// 		}
-				// 		temp = temp->next;
-				// 	}
-				// }
 			}
 		}
 
@@ -430,18 +374,18 @@ public:
 		}
 		return nullptr; // need fix
 	}
-	void orderOfCustomer(Customer *newCustomer)
+	void orderOfCustomer(string name, int energy)
 	{
+		Customer *newCustomer = new Customer(name, energy, nullptr, nullptr);
 		if (!headOrderQ)
 		{
-			headOrderQ = tailOrderQ = newCustomer;
-		}
-		else
-		{
-			newCustomer->prev = tailOrderQ;
-			tailOrderQ->next = newCustomer;
+			headOrderQ = newCustomer;
 			tailOrderQ = newCustomer;
+			return;
 		}
+		tailOrderQ -> next = newCustomer;
+		newCustomer -> prev = tailOrderQ;
+		tailOrderQ = newCustomer;
 	}
 	void kickOutCustomer(int num)
 	{
@@ -457,7 +401,7 @@ public:
 		}
 		for (int i = 1; i <= num; i++)
 		{
-			while (temp1 -> next != nullptr && temp2->next != curCustomer)
+			while (temp2->next != curCustomer)
 			{
 				Customer *temp = temp2 -> next;
 				if (temp2 -> name == temp1 -> name && temp2 -> energy == temp1 ->energy)
@@ -476,52 +420,8 @@ public:
 					break;
 				}
 				else temp2 = temp;
-				// Customer *temp = temp2;
-				// if (temp2 == curCustomer)
-				// {
-				// 	temp->next = curCustomer->next;
-				// 	temp->prev = curCustomer->prev;
-				// 	if (curCustomer->energy > 0)
-				// 	{
-				// 		curCustomer = curCustomer->next;
-				// 		curCustomer->prev = temp->prev;
-				// 		curCustomer = curCustomer;
-				// 	}
-				// 	if (curCustomer->energy < 0)
-				// 	{
-				// 		curCustomer = curCustomer->prev;
-				// 		curCustomer->next = temp->next;
-				// 		curCustomer = curCustomer;
-				// 	}
-				// 	temp2 = temp2->next;
-				// 	delete temp;
-				// 	numAfterKick--;
-				// }
-				// else
-				// {
-				// 	if (temp1->name == temp2->name)
-				// 	{
-				// 		temp->next = temp2->next;
-				// 		temp->prev = temp2->prev;
-				// 		if (temp2->energy > 0)
-				// 		{
-				// 			curCustomer = temp2 -> next;
-				// 		}
-				// 		if (temp2->energy < 0)
-				// 		{
-				// 			curCustomer = temp2 -> prev; 
-				// 		}
-				// 		temp2 = temp2->next;
-				// 		delete temp;
-				// 		numAfterKick--;
-				// 	}
-				// 	else
-				// 	{
-				// 		temp2 = temp2->next;
-				// 	}
-				// }
 			}
-			if (temp1 -> next == nullptr) break;
+			if (temp1 == tailOrderQ) break; 
 			temp1 = temp1->next;
 		}
 	}
@@ -745,7 +645,14 @@ public:
 	{
 		// cout << name << " " << energy << endl;
 		// cout << MAXSIZE << endl;
+		// this->orderOfCustomer(name, energy);
+		// Customer *temp = headOrderQ;
+		// while (temp != tailOrderQ -> next ){
+		// 	cout << temp ->name << "/" << endl;
+		// 	temp = temp -> next;
+		// }
 		this->insertToTable(name, energy);
+		// cout << headOrderQ << endl;
 		this->printTable();
 		// cout << this->numCustomers << endl;
 	}
