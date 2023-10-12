@@ -65,89 +65,7 @@ public:
 		// cout << flagCustomer->name << endl;
 		return flagCustomer;
 	}
-	void findMaxDifference(Customer *newCustomer)
-	{
-		Customer *temp = curCustomer;
-		int curDifference = curCustomer -> energy;
-		curDifference = abs((newCustomer->energy) - (temp->energy));
-		Customer *flagCustomer = temp;
-		int maxRes = max(maxRes, curDifference);
-		temp = temp -> next;
-		while (temp -> next != curCustomer -> next)
-		{
-			curDifference = abs((newCustomer->energy) - (temp->energy));
-			if (curDifference > maxRes)
-			{
-				maxRes = max(maxRes, curDifference);
-				flagCustomer = temp;
-			}
-			temp = temp->next;
-		}
-		cout << maxRes << endl;
-		int unsignedMaxRes = (newCustomer->energy) - (flagCustomer->energy);
-		curCustomer = flagCustomer;
-		if (unsignedMaxRes > 0)
-		{
-			if (numCustomers != MAXSIZE - 1)
-			{
-				insertToRight(newCustomer, curCustomer);
-			}
-			else {
-				if (curCustomer -> next == curCustomer){
-					curCustomer -> next = newCustomer;
-					newCustomer -> prev = curCustomer;
-					newCustomer -> next = curCustomer;
-					curCustomer = newCustomer;
-					numCustomers++;
-				}
-				else {
-					insertToRight(newCustomer, curCustomer);
-					Customer *temp = curCustomer;
-					temp = temp -> next;
-					while (temp != curCustomer)
-					{
-						temp = temp -> next;
-					}
-					temp -> next = curCustomer;
-					curCustomer -> prev = temp;
-				}
-				// Customer *nextCustomer = curCustomer->next;
-				// curCustomer->next = newCustomer;
-				// nextCustomer->prev = newCustomer;
-				// newCustomer->next = nextCustomer;
-				// newCustomer->prev = curCustomer;
-				// curCustomer = newCustomer;
-				// numCustomers++;
-			}
-		}
-		else
-		{
-			if (numCustomers != MAXSIZE - 1)
-			{
-				insertToLeft(newCustomer, curCustomer);
-			}
-			else {
-				// if (curCustomer == curCustomer){
-				// 	curCustomer -> prev = newCustomer;
-				// 	newCustomer -> next = curCustomer;
-				// 	newCustomer -> next = curCustomer;
-				// 	curCustomer = newCustomer;
-				// 	numCustomers++;
-				// }
-				// else {
-				// 	insertToRight(newCustomer);
-				// 	Customer *temp = curCustomer;
-				// 	temp = temp -> next;
-				// 	while (temp != curCustomer)
-				// 	{
-				// 		temp = temp -> next;
-				// 	}
-				// 	temp -> next = curCustomer;
-				// 	curCustomer -> prev = temp;
-				// }
-		}
-	}
-	}
+	void purpleMurasaki()
 	void printTable()
 	{
 		// cout << "Print table: " << headTable->next->name << endl;
@@ -264,7 +182,7 @@ public:
 
 		else if (numCustomers >= MAXSIZE)
 		{
-			Customer *cus = new Customer(name, energy, nullptr, nullptr);
+			// Customer *cus = new Customer(name, energy, nullptr, nullptr);
 			addCustomerInQueue(newCustomer);
 		}
 
