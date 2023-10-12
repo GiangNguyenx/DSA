@@ -546,40 +546,71 @@ public:
 		}
 	}
 	void printMinInSubString(){
-		Customer *cur = curCustomer;
-		Customer *minStart = nullptr;
-		Customer *minEnd = nullptr;
-		Customer *curStart = nullptr;
-		Customer *curEnd = nullptr;
-		int minSum = 2147483647 - 1;
-		int curSum = 0;
-		if (numCustomers == 0) return;
-		while (cur != nullptr){
-			if (cur -> energy <= 0){
-				curStart = cur -> next;
-				curEnd = nullptr;
-				curSum = 0;
+		int curCount = 0;
+		int curEnergy = 0;
+		int bestCount = 0;
+		int bestEnergy = 0;
+		Customer *temp = curCustomer;
+		int minEnergy = 2147483647 - 1;
+		if (numCustomers < 4) return;
+		if (numCustomers == 4)
+		{
+			while (temp -> next != curCustomer)
+			{
+				if (temp -> energy < minEnergy)
+				{
+					minEnergy = temp -> energy;
+					curCustomer = temp;
+					temp = temp -> next;
+				}
+				else temp = temp -> next;
 			}
-			else {
-				if (curEnd == nullptr){
-					curStart = cur;
-					curEnd = cur;
-					curSum = cur -> energy;
-				}
-				else {
-					curEnd = cur;
-					curSum += cur -> energy;
-				}
-				if (curSum < minSum && curEnd != nullptr && curEnd -> next != nullptr){
-					minSum = curSum;
-					minStart = curStart;
-					minEnd = curEnd;
-				}
+			if (temp -> energy < minEnergy) 
+			{
+				minEnergy = temp -> energy;
+				curCustomer = temp;
 			}
-			cur = cur -> next;
+			temp = curCustomer;
+			while (temp -> next != curCustomer)
+			{
+				cout << temp -> name << "-" << temp -> energy << endl;
+				temp = temp -> next;
+			}
+			cout << temp -> name << "-" << temp -> energy << endl;
 		}
-		for (Customer *cus = minStart; cus != minEnd -> next; cus = cus -> next){
-			cout << cus -> name << "-" << cus -> energy << endl;
+		else 
+		{
+			while (temp -> next != curCustomer)
+			{
+				if (temp -> energy <= 0){
+					curCount++;
+					curEnergy += temp -> energy;
+					if (curCount >= 4){
+						if (curEnergy < bestEnergy || bestCount == 0)
+						{
+							bestCount == curCount;
+							bestEnergy = bestCount;
+						}
+					}
+				}
+				else 
+				{
+					curCount = 0;
+					curEnergy = 0;
+				}
+				temp = temp -> next;
+			}
+			if (bestCount >= 4)
+			{
+				Customer *cur = temp;
+				for (int i = 0; i < bestCount; i++){
+					cout << cur -> name << "-" << cur -> energy;
+					cur = cur -> next;
+				}
+			
+				cout << endl;
+			}
+			else return;
 		}
 	}
 
@@ -679,8 +710,8 @@ public:
 	void REVERSAL()
 	{
 		cout << "reversal" << endl;
-		reversalTable();
-		this->printTable();
+		// reversalTable();
+		// this->printTable();
 	}
 	void UNLIMITED_VOID()
 	{
