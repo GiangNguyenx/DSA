@@ -264,7 +264,7 @@ public:
 
 		else if (numCustomers >= MAXSIZE)
 		{
-			// Customer *cus = new Customer(name, energy, nullptr, nullptr);
+			Customer *cus = new Customer(name, energy, nullptr, nullptr);
 			addCustomerInQueue(newCustomer);
 		}
 
@@ -447,26 +447,6 @@ public:
 		{
 			// cout << temp1->name << endl;
 			this->deleteCustomer(num, temp1);
-			// while (temp2->next != curCustomer)
-			// {
-			// 	Customer *temp = temp2 -> next;
-			// 	if (temp2 -> name == temp1 -> name && temp2 -> energy == temp1 ->energy)
-			// 	{
-			// 		temp2 -> prev -> next = temp2 -> next;
-			// 		temp2 -> next -> prev = temp2 -> prev;
-			// 		if (temp2 -> energy > 0) 
-			// 		{
-			// 			curCustomer = temp2 -> next;
-			// 		}
-			// 		else 
-			// 		{
-			// 			curCustomer = temp2 -> prev;
-			// 		}
-			// 		delete temp2; 
-			// 		break;
-			// 	}
-			// 	else temp2 = temp;
-			// }
 			if (temp1 == tailOrderQ) break; 
 			temp1 = temp1->next;
 		}
@@ -591,12 +571,27 @@ public:
 			}
 		}
 	}
+	
+	// void calculateSum(Customer *temp, Customer *flagCus, Customer *flagFirst, int &curr){
+	// 	while(temp -> next != curCustomer){
+	// 		int tempSum = 0;
+	// 		for (int i = 0; i < numCustomers; i++){
+	// 			tempSum += temp -> energy;
+	// 			if (curr < tempSum) {
+	// 				curr = tempSum;
+	// 				flagFirst = temp;
+	// 				flagCus
+	// 				break;
+	// 			}
+	// 		}
+	// 	}
+	// }
 	void printMinInSubString(){
-		int curCount = 0;
-		int curEnergy = 0;
-		int bestCount = 0;
-		int bestEnergy = 0;
+		Customer *flagCustomer = nullptr;
 		Customer *temp = curCustomer;
+		Customer *flagFirst = temp;
+		int sum = 0;
+		int current = temp -> energy;
 		int minEnergy = 2147483647 - 1;
 		if (numCustomers < 4) return;
 		if (numCustomers == 4)
@@ -626,37 +621,29 @@ public:
 		}
 		else 
 		{
-			while (temp -> next != curCustomer)
-			{
-				if (temp -> energy <= 0){
-					curCount++;
-					curEnergy += temp -> energy;
-					if (curCount >= 4){
-						if (curEnergy < bestEnergy || bestCount == 0)
-						{
-							bestCount == curCount;
-							bestEnergy = bestCount;
-						}
-					}
+			for (int i = 0; i < numCustomers; i++){
+				sum += temp -> energy;
+				if (i == 3){
+					current = sum;
+					flagCustomer = temp;
 				}
-				else 
-				{
-					curCount = 0;
-					curEnergy = 0;
+				else if (i > 3){
+					if (sum <= current){
+						current = sum;
+						flagCustomer = temp -> next;
+					}
 				}
 				temp = temp -> next;
 			}
-			if (bestCount >= 4)
-			{
-				Customer *cur = temp;
-				for (int i = 0; i < bestCount; i++){
-					cout << cur -> name << "-" << cur -> energy;
-					cur = cur -> next;
-				}
-			
-				cout << endl;
+			temp = temp -> next;
+			for (int i = 0; i < numCustomers; i++){
+				// calculateSum(temp,flagCustomer,flagFirst,current);
+				temp = temp -> next;
 			}
-			else return;
+			while (flagFirst != flagCustomer -> next){
+				cout << flagFirst -> name << "-" << flagFirst -> energy << endl;
+				flagFirst = flagFirst -> next;
+			}
 		}
 	}
 
@@ -675,58 +662,35 @@ public:
 	// 		temp1 = temp1 -> next;
 	// 	}
 	// 	if (sumJujutsuEnergy > abs(sumJureiEnergy)){
-	// 		// if (curCustomer -> energy < 0) 
-	// 		// {
-	// 		// 	temp -> prev -> next = temp -> next;
-	// 		// 	temp -> next -> prev = temp -> prev;
-	// 		// 	curCustomer = temp -> prev;
-	// 		// 	curCustomer = curCustomer;
-	// 		// 	cout << temp -> energy << "-" << temp -> name << endl;
-	// 		// 	delete temp;
-	// 		// }
-	// 		// temp2 = temp2 -> next;
-	// 		for (int i = 1; i <= numCustomers; i++){
-	// 			do {
-	// 				Customer *nextCustomer = temp -> next;
-	// 				if (temp -> energy < 0 && temp -> name == temp2 ->name)
-	// 				{
-	// 					Customer *prevCustomer = temp;
-	// 					while (prevCustomer -> next != temp)
-	// 					{
-	// 						prevCustomer = prevCustomer -> next;
-	// 					}
-	// 					prevCustomer -> next = nextCustomer;
-	// 					delete temp;
-	// 				}
-	// 				temp = nextCustomer;
-	// 			} while (temp != curCustomer);
-	// 			temp2 = temp2 -> next;
-	// 		}			
 	// 	}
-	// 	else if (sumJujutsuEnergy < abs(sumJureiEnergy)) {
-	// 		for (int i = 1; i <= numCustomers; i++) {
-	// 			if (temp2 -> energy > 0){
-	// 				Customer *temp3 = curCustomer;
-	// 				while (temp3 -> next ! curCustomer) {
-	// 					if (temp3 -> name == temp2 -> name){
-	// 						cout << temp3 -> name << "-" << temp3 -> energy << endl;
-	// 						Customer *temp = temp3;
-	// 						temp -> next = temp3 -> next;
-	// 						temp -> prev = temp3 -> prev;
-							
-	// 						delete temp3;
-	// 						break;
-	// 					}
-	// 					else {
-	// 						temp3 = temp3 -> next;
-	// 					}
-	// 				}
-	// 				temp2 = temp2 -> next;
-	// 			}
-	// 			else temp2 = temp2 -> next;
-	// 		}
-	// 	}
-	
+	// }
+
+	void lightPrint (int num){
+		Customer *temp1 = curCustomer;
+		Customer *temp2 = headQueue;
+		// cout << temp2 -> name << "-" << temp2 -> energy << endl;
+		if (num > 0){
+			while (temp1 -> next != curCustomer){
+				cout << temp1 -> name << "-" << temp1 -> energy << endl;
+				temp1 = temp1 -> next;
+			}
+			cout << temp1 -> name << "-" << temp1 -> energy << endl;
+		}
+		else if (num < 0){
+			while (temp1 -> prev != curCustomer){
+				cout << temp1 -> name << "-" << temp1 -> energy << endl;
+				temp1 = temp1 -> prev;
+			}
+			cout << temp1 -> name << "-" << temp1 -> energy << endl;
+		}
+		else {
+			while (temp2 -> next != nullptr ){
+				cout << temp2 -> name << "-" << temp2 -> energy << endl;
+				temp2 = temp2 -> next;
+			}
+			cout << temp2 -> name << "-" << temp2 -> energy << endl;
+		}
+	}
 	void RED(string name, int energy)
 	{
 		// cout << name << " " << energy << endl;
@@ -746,8 +710,8 @@ public:
 	{
 		cout << "blue " << num << endl;
 		// numAfterKick = numCustomers - num;
-		kickOutCustomer(num);
-		this->printTable();
+		// kickOutCustomer(num);
+		// this->printTable();
 	}
 	void PURPLE()
 	{
@@ -771,6 +735,7 @@ public:
 	void LIGHT(int num)
 	{
 		cout << "light " << num << endl;
+		this -> lightPrint(num);
 	}
 };
 
