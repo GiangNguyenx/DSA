@@ -393,6 +393,30 @@ public:
 		tailOrderQ = newCustomer;
 	}
 
+	void deleteHead(Customer* prevHead, Customer *curCustomer, Customer *temp){
+		Customer *prevHead = nullptr;
+		Customer *temp = headQueue;
+
+		prevHead = headQueue->prev;
+		headQueue = headQueue->next;
+		prevHead->next = headQueue;
+		numCustomers--;
+		delete temp;
+	}
+	void inserAfterKick(){
+		Customer *queueToTable = headQueue;
+
+		while (numCustomers < MAXSIZE){
+			insertToTable(queueToTable->name, queueToTable->energy);
+
+		}
+	}
+		void insertAfterKick(){
+		// Get customer from queue to table if queue has any and table has slot
+		this->insertToTable(headQueue->name, headQueue->energy);
+
+	}
+	
 	void deleteCustomer(int numToDelete, Customer *kickedCustomer){
 		if (!curCustomer) return; //
 
