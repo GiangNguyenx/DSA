@@ -616,7 +616,7 @@ public:
 				{
 					curr = tempSum;
 					flagCus = current;
-					flagFirst = temp;;
+					flagFirst = temp;
 				}
 			}
 			current = current->next;
@@ -626,13 +626,13 @@ public:
 	{
 		Customer *flagCustomer = nullptr;
 		Customer *temp = curCustomer;
-		Customer *flagFirst = temp;
+		Customer *flagFirst = curCustomer;
 		int sum = 0;
 		int current = temp->energy;
 		int minEnergy = 2147483647 - 1;
 		if (numCustomers < 4)
 			return;
-		if (numCustomers == 4)
+		if (numCustomers == 4 || MAXSIZE == 4)
 		{
 			while (temp->next != curCustomer)
 			{
@@ -684,12 +684,29 @@ public:
 				calculateSum(temp, flagCustomer, flagFirst, current);
 				temp = temp->next;
 			}
-			cout << flagCustomer->name << "-" << flagCustomer->energy << endl;
-			while (flagFirst -> next != flagCustomer -> next)
+			Customer *tempFlagF = flagFirst;
+			Customer *tempFlagC = flagCustomer;
+			Customer *minCustomer = tempFlagF;
+			tempFlagF = tempFlagF -> next;
+			while (tempFlagF != tempFlagC -> next){
+				if (tempFlagF -> energy < minCustomer -> energy){
+					minCustomer = tempFlagF;
+					tempFlagF = tempFlagF -> next;
+				}
+				else tempFlagF = tempFlagF -> next;
+			}
+			Customer *tempMin = minCustomer;
+			while (tempMin != flagCustomer -> next)
+			{
+				cout << tempMin->name << "-" << tempMin->energy << endl;
+				tempMin = tempMin->next;
+			}
+			while (flagFirst -> next != minCustomer)
 			{
 				cout << flagFirst->name << "-" << flagFirst->energy << endl;
-				flagFirst = flagFirst->next;
+				flagFirst = flagFirst -> next;
 			}
+			cout << flagFirst->name << "-" << flagFirst->energy << endl;
 		}
 	}
 
@@ -808,7 +825,7 @@ public:
 	{
 		cout << "blue " << num << endl;
 		// numAfterKick = numCustomers - num;
-		kickOutCustomer(num);
+		// kickOutCustomer(num);
 		// this->printTable();
 	}
 	void PURPLE()
