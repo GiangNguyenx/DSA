@@ -514,20 +514,11 @@ public:
 		}
 	}
 	
-	// void calculateSum(Customer *temp, Customer *flagCus, Customer *flagFirst, int &curr){
-	// 	while(temp -> next != curCustomer){
-	// 		int tempSum = 0;
-	// 		for (int i = 0; i < numCustomers; i++){
-	// 			tempSum += temp -> energy;
-	// 			if (curr < tempSum) {
-	// 				curr = tempSum;
-	// 				flagFirst = temp;
-	// 				flagCus
-	// 				break;
-	// 			}
-	// 		}
-	// 	}
-	// }
+	void calculateSum(Customer *temp, Customer *&flagCus, Customer *&flagFirst, int &curr){
+		Customer *current = temp;
+		int tempSum = 0;
+		for (int i = 0; i < numCus)
+	}
 	void printMinInSubString(){
 		Customer *flagCustomer = nullptr;
 		Customer *temp = curCustomer;
