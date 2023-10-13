@@ -50,10 +50,11 @@ public:
 		temp = temp->next;
 
 		while (temp != curCustomer){
-			rootCurDifference = newCustomer->energy - temp->energy;
-			curDifference = abs(rootCurDifference);
+			// cout << "Root:" << rootCurDifference << endl;
+			curDifference = abs(newCustomer->energy - temp->energy);
 
 			if (curDifference > maxRes){
+				rootCurDifference = newCustomer->energy - temp->energy;
 				maxRes = curDifference;
 				flagCustomer = temp;
 			}
@@ -311,30 +312,25 @@ public:
 		tailOrderQ = newCustomer;
 	}
 
-	void deleteHead(Customer* prevHead, Customer *curCustomer, Customer *temp){
-		prevHead = nullptr;
-		temp = headQueue;
-
-		prevHead = headQueue->prev;
-		headQueue = headQueue->next;
-		prevHead->next = headQueue;
-		numCustomers--;
-		delete temp;
-	}
 	void inserAfterKick(){
+		// Get customer from queue to table if queue has any and table has slot
 		Customer *queueToTable = headQueue;
 
 		while (numCustomers < MAXSIZE){
 			insertToTable(queueToTable->name, queueToTable->energy);
-
+			deleteHeadList(headQueue);
+			queueToTable = queueToTable->next;
 		}
 	}
-		void insertAfterKick(){
-		// Get customer from queue to table if queue has any and table has slot
-		this->insertToTable(headQueue->name, headQueue->energy);
 
+	void deleteHeadList(Customer *headList){
+		Customer *headPrev = headList->prev;
+		Customer *deleteNode = headList;
+		headList = headList->next;
+		headPrev->next = headList; 
+
+		delete deleteNode;
 	}
-	
 	void deleteCustomer(int numToDelete, Customer *kickedCustomer){
 		if (!curCustomer) return; //
 
@@ -349,27 +345,36 @@ public:
 		}
 
 		if (temp->next == curCustomer && prev1 == nullptr){
+			// List has only a node and that is kicked customer
 			curCustomer = nullptr;
 			delete temp;
+			numCustomers--;
 			return;
 		}
 
 		if (temp == curCustomer){
-			prev1 = curCustomer->prev;
-			curCustomer = curCustomer->next;
-			prev1->next = curCustomer;
-			delete temp;
+			// Delete at head of table
+			this->deleteHeadList(curCustomer);
+			numCustomers--;
+			// prev1 = curCustomer->prev;
+			// curCustomer = curCustomer->next;
+			// prev1->next = curCustomer;
+			// delete temp;
 		}
 		else if (temp->next == curCustomer){
+			// Delete at tail
 			prev1->next = curCustomer;
 			curCustomer->prev = prev1;
+			numCustomers--;
 			delete temp;
 		}
 		else {
+			// Delete at mid
 			Customer *nextTemp = temp->next;
 
 			prev1->next = nextTemp;
 			nextTemp->prev = prev1;
+			numCustomers--;
 			delete temp;
 		}
 	}
@@ -658,7 +663,7 @@ public:
 	{
 		cout << "blue " << num << endl;
 		// numAfterKick = numCustomers - num;
-		// kickOutCustomer(num);
+		kickOutCustomer(num);
 		// this->printTable();
 	}
 	void PURPLE()
