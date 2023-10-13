@@ -65,7 +65,7 @@ public:
 		// cout << flagCustomer->name << endl;
 		return flagCustomer;
 	}
-	void purpleMurasaki()
+	void purpleMurasaki(){}
 	void printTable()
 	{
 		// cout << "Print table: " << headTable->next->name << endl;
@@ -517,7 +517,7 @@ public:
 	void calculateSum(Customer *temp, Customer *&flagCus, Customer *&flagFirst, int &curr){
 		Customer *current = temp;
 		int tempSum = 0;
-		for (int i = 0; i < numCus)
+		// for (int i = 0; i < numCus)
 	}
 	void printMinInSubString(){
 		Customer *flagCustomer = nullptr;
