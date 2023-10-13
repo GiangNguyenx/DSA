@@ -65,7 +65,7 @@ public:
 		// cout << flagCustomer->name << endl;
 		return flagCustomer;
 	}
-	void purpleMurasaki()
+	void purpleMurasaki(){}
 	void printTable()
 	{
 		// cout << "Print table: " << headTable->next->name << endl;
@@ -312,8 +312,8 @@ public:
 	}
 
 	void deleteHead(Customer* prevHead, Customer *curCustomer, Customer *temp){
-		Customer *prevHead = nullptr;
-		Customer *temp = headQueue;
+		prevHead = nullptr;
+		temp = headQueue;
 
 		prevHead = headQueue->prev;
 		headQueue = headQueue->next;
@@ -517,7 +517,22 @@ public:
 	void calculateSum(Customer *temp, Customer *&flagCus, Customer *&flagFirst, int &curr){
 		Customer *current = temp;
 		int tempSum = 0;
-		for (int i = 0; i < numCus)
+		for (int i = 0; i < numCustomers; i++){
+			tempSum += current -> energy;
+			if (i == 3 && tempSum < curr){
+				curr = tempSum;
+				flagCus = current;
+				flagFirst = temp;
+			}
+			else if (i > 3){
+				if (tempSum <= curr){
+					curr = tempSum;
+					flagCus = current;
+					flagFirst = temp;
+				}
+			}
+			current = current -> next;
+		}
 	}
 	void printMinInSubString(){
 		Customer *flagCustomer = nullptr;
@@ -570,7 +585,7 @@ public:
 			}
 			temp = temp -> next;
 			for (int i = 0; i < numCustomers; i++){
-				// calculateSum(temp,flagCustomer,flagFirst,current);
+				calculateSum(temp,flagCustomer,flagFirst,current);
 				temp = temp -> next;
 			}
 			while (flagFirst != flagCustomer -> next){
