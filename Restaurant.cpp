@@ -318,9 +318,9 @@ public:
 
 		while (numCustomers < MAXSIZE){
 			insertToTable(queueToTable->name, queueToTable->energy);
+			queueToTable = queueToTable->next;
 			deleteHeadList(headQueue);
 			currSizeQueue--;
-			queueToTable = queueToTable->next;
 		}
 	}
 
