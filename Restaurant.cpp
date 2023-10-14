@@ -496,6 +496,8 @@ public:
 			{
 				if (temp1->energy < 0 && temp2->energy < 0)
 				{
+					if (temp1 == curCustomer) curCustomer = temp2;
+					else if (temp2 == curCustomer) curCustomer = temp1;
 					this->swapInfo(temp1, temp2);
 					jurei -= 2;
 					temp1 = temp1->next;
@@ -538,6 +540,8 @@ public:
 			{
 				if (temp3->energy > 0 && temp4->energy > 0)
 				{
+					if (temp3 == curCustomer) curCustomer = temp4;
+					else if (temp4 == curCustomer) curCustomer = temp3;
 					this->swapInfo(temp3, temp4);
 					jujutsu -= 2;
 					temp3 = temp3->next;
@@ -912,8 +916,8 @@ public:
 	void REVERSAL()
 	{
 		cout << "reversal" << endl;
-		// reversalTable();
-		// this->printTable();
+		reversalTable();
+		this->printTable();
 	}
 	void UNLIMITED_VOID()
 	{
