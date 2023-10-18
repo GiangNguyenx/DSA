@@ -927,7 +927,7 @@ public:
 	void DOMAIN_EXPANSION()
 	{
 		cout << "domain_expansion" << endl;
-		this -> expansionKickOut();
+		// this -> expansionKickOut();
 	}
 	void LIGHT(int num)
 	{
