@@ -279,47 +279,48 @@ public:
 
 		delete deleteNode;
 	}
-	void deleteCustomer(int numToDelete, Customer *kickedCustomer)
+	void deleteCustomer(Customer *listToDelete, Customer *kickedCustomer)
 	{
-		if (!curCustomer)
+		// Delete kickedCustomer from table
+		if (!listToDelete)
 			return; //
 
-		Customer *temp = curCustomer;
+		Customer *temp = listToDelete;
 		Customer *prev1 = nullptr;
 
 		while (temp->name != kickedCustomer->name)
 		{
-			if (temp->next == curCustomer)
+			if (temp->next == listToDelete)
 				return; // break?
 
 			prev1 = temp;
 			temp = temp->next;
 		}
 
-		if (temp->next == curCustomer && prev1 == nullptr)
+		if (temp->next == listToDelete && prev1 == nullptr)
 		{
 			// List has only a node and that is kicked customer
-			curCustomer = nullptr;
+			listToDelete = nullptr;
 			delete temp;
 			numCustomers--;
 			return;
 		}
 
-		if (temp == curCustomer)
+		if (temp == listToDelete)
 		{
 			// Delete at head of table
-			this->deleteHeadList(curCustomer);
+			this->deleteHeadList(listToDelete);
 			numCustomers--;
-			// prev1 = curCustomer->prev;
-			// curCustomer = curCustomer->next;
-			// prev1->next = curCustomer;
+			// prev1 = listToDelete->prev;
+			// listToDelete = listToDelete->next;
+			// prev1->next = listToDelete;
 			// delete temp;
 		}
-		else if (temp->next == curCustomer)
+		else if (temp->next == listToDelete)
 		{
 			// Delete at tail
-			prev1->next = curCustomer;
-			curCustomer->prev = prev1;
+			prev1->next = listToDelete;
+			listToDelete->prev = prev1;
 			numCustomers--;
 			delete temp;
 		}
@@ -350,7 +351,7 @@ public:
 		for (int i = 0; i < num; i++)
 		{
 			// cout << temp1->name << endl;
-			this->deleteCustomer(num, temp1);
+			this->deleteCustomer(curCustomer, temp1);
 			if (temp1 == tailOrderQ)
 				break;
 			temp1 = temp1->next;
