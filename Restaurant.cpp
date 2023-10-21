@@ -885,8 +885,8 @@ public:
 	{
 		cout << "blue " << num << endl;
 		// numAfterKick = numCustomers - num;
-		// kickOutCustomer(num);
-		// this->printTable();
+		kickOutCustomer(num);
+		this->printTable();
 	}
 	void PURPLE()
 	{
