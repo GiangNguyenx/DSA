@@ -25,11 +25,11 @@ class Restaurant {
 			public:	
 				string name;
 				int energy;
-				customer* prev;
-				customer* next;
+				customer * prev;
+				customer * next;
 			public:
 				customer(){}
-				customer(string na, int e, customer* p, customer *ne): name(na), energy(e), prev(p), next(ne){}
+				customer(string na, int e, customer * p, customer *ne): name(na), energy(e), prev(p), next(ne){}
 				~customer() {}
 				void print() {
 					cout << name << "-" << energy << endl;
