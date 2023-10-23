@@ -21,18 +21,18 @@ private:
 public:
 	imp_res() : headQueue(nullptr), tailQueue(nullptr), curCustomer(nullptr), headOrderQ(nullptr), tailOrderQ(nullptr), numCustomers(0), currSizeQueue(0), jujutsu(0), jurei(0), numAfterKick(0) {}
 
-	customer :: ~customer() 
-	{
-		if (prev != NULL) {
-			prev -> next = next;
-		}
-		if (next != NULL) {
-			next -> prev = prev;
-		}
-		prev = NULL;
-		next = NULL;
-		delete this;
-	}
+	// ~customer() 
+	// {
+	// 	if (prev != NULL) {
+	// 		prev -> next = next;
+	// 	}
+	// 	if (next != NULL) {
+	// 		next -> prev = prev;
+	// 	}
+	// 	prev = NULL;
+	// 	next = NULL;
+	// 	delete this;
+	// }
 	customer *findMaxDifference(customer *newCustomer, int &rootDiff)
 	{
 		customer *temp = curCustomer;
@@ -116,7 +116,7 @@ public:
 
 	void insertToTable(string name, int energy)
 	{
-		customer *newCustomer = new Customer(name, energy, nullptr, nullptr);
+		customer *newCustomer = new customer(name, energy, nullptr, nullptr);
 		// cout << numCustomers << ' ' << MAXSIZE  << endl;
 		// cout << "Insert to table: " << name << ' ' << energy << endl;
 
@@ -182,14 +182,14 @@ public:
 
 		else if (numCustomers >= MAXSIZE)
 		{
-			// customer *cus = new Customer(name, energy, nullptr, nullptr);
+			// customer *cus = new customer(name, energy, nullptr, nullptr);
 			addCustomerInQueue(newCustomer);
 		}
 	}
 	void checkNameOfCustomer(string name, int energy)
 	{
 		customer *temp = curCustomer;
-		customer *newCustomer = new Customer(name, energy, nullptr, nullptr);
+		customer *newCustomer = new customer(name, energy, nullptr, nullptr);
 		// if (newCustomer -> name == curCustomer -> name) cout << "Cook" << endl;
 		while (temp->next != curCustomer)
 		{
@@ -236,7 +236,7 @@ public:
 
 	void orderOfCustomer(string name, int energy)
 	{
-		customer *newCustomer = new Customer(name, energy, nullptr, nullptr);
+		customer *newCustomer = new customer(name, energy, nullptr, nullptr);
 		if (!headOrderQ)
 		{
 			headOrderQ = newCustomer;
@@ -430,31 +430,31 @@ public:
 				}
 				temp = current;
 			}
-		customer *checkAbsEnergy = headQueue;
-		customer *maxAbsEnergy;
-		int maxAbs = 0;
-		while (checkAbsEnergy != tailQueue)
-		{
-			if (abs(checkAbsEnergy->energy) >= maxAbs)
-			{
-				maxAbs = abs(checkAbsEnergy->energy);
-				maxAbsEnergy = checkAbsEnergy;
-			}
-			checkAbsEnergy = checkAbsEnergy->next;
-		}
-		if (abs(checkAbsEnergy->energy) >= maxAbs)
-		{
-			maxAbs = abs(checkAbsEnergy->energy);
-			maxAbsEnergy = checkAbsEnergy;
-		}
-		// insertion sort
-		customer *segmentCheck = headQueue->next;
-		while (segmentCheck != maxAbsEnergy)
-		{
-			int keyEnergy = headQueue->next->energy;
-			customer *tempSegment = segmentCheck->prev;
-			while (tempSegment !=)
-		}
+		// customer *checkAbsEnergy = headQueue;
+		// customer *maxAbsEnergy;
+		// int maxAbs = 0;
+		// while (checkAbsEnergy != tailQueue)
+		// {
+		// 	if (abs(checkAbsEnergy->energy) >= maxAbs)
+		// 	{
+		// 		maxAbs = abs(checkAbsEnergy->energy);
+		// 		maxAbsEnergy = checkAbsEnergy;
+		// 	}
+		// 	checkAbsEnergy = checkAbsEnergy->next;
+		// }
+		// if (abs(checkAbsEnergy->energy) >= maxAbs)
+		// {
+		// 	maxAbs = abs(checkAbsEnergy->energy);
+		// 	maxAbsEnergy = checkAbsEnergy;
+		// }
+		// // insertion sort
+		// customer *segmentCheck = headQueue->next;
+		// while (segmentCheck != maxAbsEnergy)
+		// {
+		// 	int keyEnergy = headQueue->next->energy;
+		// 	customer *tempSegment = segmentCheck->prev;
+		// 	while (tempSegment !=)
+		// }
 	}
 
 	void swapInfo(customer *cus1, customer *cus2)
@@ -895,14 +895,6 @@ public:
 	}
 	void RED(string name, int energy)
 	{
-		// cout << name << " " << energy << endl;
-		// cout << MAXSIZE << endl;
-		// this->orderOfCustomer(name, energy);
-		// customer *temp = headOrderQ;
-		// while (temp != tailOrderQ -> next ){
-		// 	cout << temp ->name << "/" << endl;
-		// 	temp = temp -> next;
-		// }
 		this->insertToTable(name, energy);
 		// cout << headOrderQ << endl;
 		this->printTable();
@@ -911,7 +903,6 @@ public:
 	void BLUE(int num)
 	{
 		cout << "blue " << num << endl;
-		// numAfterKick = numCustomers - num;
 	}
 	void PURPLE()
 	{
