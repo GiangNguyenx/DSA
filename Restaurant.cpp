@@ -23,18 +23,19 @@ private:
 public:
 	imp_res() : headQueue(nullptr), tailQueue(nullptr), curCustomer(nullptr), headOrderTable(nullptr), tailOrderTable(nullptr), headOrderQ(nullptr), tailOrderQ(nullptr), numCustomers(0), currSizeQueue(0), jujutsu(0), jurei(0), numAfterKick(0) {}
 
-	~imp_res() {
-		customer *temp = curCustomer -> next;
+	~imp_res()
+	{
+		customer *temp = curCustomer->next;
 		customer *tempQ = headQueue;
 		customer *tempOT = headOrderTable;
 		customer *tempOQ = headOrderQ;
 
-		if (curCustomer == NULL) 
+		if (curCustomer == NULL)
 		{
 			temp = NULL;
 			return;
 		}
-		if (curCustomer -> next == curCustomer) 
+		if (curCustomer->next == curCustomer)
 		{
 			delete curCustomer;
 			temp = NULL;
@@ -44,7 +45,7 @@ public:
 		while (temp != curCustomer)
 		{
 			tmp = temp;
-			temp = temp -> next;
+			temp = temp->next;
 			delete tmp;
 		}
 		delete curCustomer;
@@ -55,7 +56,7 @@ public:
 		while (tempQ != NULL)
 		{
 			customer *cur = tempQ;
-			tempQ = tempQ -> next;
+			tempQ = tempQ->next;
 			delete cur;
 		}
 		tempQ = NULL;
@@ -65,7 +66,7 @@ public:
 		while (tempOT != NULL)
 		{
 			customer *cur = tempOT;
-			tempOT = tempOT -> next;
+			tempOT = tempOT->next;
 			delete cur;
 		}
 		tempOT = NULL;
@@ -75,7 +76,7 @@ public:
 		while (tempOQ != NULL)
 		{
 			customer *cur = tempOQ;
-			tempOQ = tempOQ -> next;
+			tempOQ = tempOQ->next;
 			delete cur;
 		}
 		tempOQ = NULL;
@@ -143,7 +144,7 @@ public:
 		// Change current customer
 		curCustomer = newCustomer;
 
-		cout << curCustomer->next->name << endl;
+		// cout << curCustomer->next->name << endl;
 		// Increse customer
 		numCustomers++;
 	}
@@ -173,101 +174,101 @@ public:
 		// cout << "Insert to table: " << name << ' ' << energy << endl;
 
 		// If restaurant just opened right now
-		if (numCustomers == 0 || !curCustomer)
-		{
-			if (energy != 0)
+			if (numCustomers == 0 || !curCustomer)
 			{
-				// Point to itself
-				newCustomer->next = newCustomer;
-				newCustomer->prev = newCustomer;
+				if (energy != 0)
+				{
+					// Point to itself
+					newCustomer->next = newCustomer;
+					newCustomer->prev = newCustomer;
 
-				// New head
-				curCustomer = newCustomer;
-				// curCustomer = headTable;
+					// New head
+					curCustomer = newCustomer;
+					// curCustomer = headTable;
 
-				numCustomers++;
+					numCustomers++;
+
+					orderOfCustomer(name, energy);
+				}
+			}
+			else if (numCustomers < MAXSIZE)
+			{
+				// cout << numCustomers << ' ' << MAXSIZE  << endl;
+				if (numCustomers < ceil(float(MAXSIZE) / 2))
+				{
+					if (energy == 0)
+					{
+						// cout << "Cut ra ngoai" << endl;
+						/* code */
+					}
+					else if (energy >= curCustomer->energy)
+					{
+						// cout << "Insert to table != 0: " << endl;
+
+						this->insertToRight(newCustomer, curCustomer);
+					}
+					else if (energy < curCustomer->energy)
+					{
+						// cout << "\nEnergy < 0\n";
+						this->insertToLeft(newCustomer, curCustomer);
+					}
+				}
+				else if (numCustomers >= ceil(float(MAXSIZE) / 2))
+				{
+					int diff = 0;
+					customer *positionToAdd = this->findMaxDifference(newCustomer, diff);
+
+					// cout << positionToAdd->name << " " << positionToAdd->energy << " " << diff << endl;
+
+					if (diff >= 0)
+					{
+						this->insertToRight(newCustomer, positionToAdd);
+					}
+					else if (diff < 0)
+					{
+						this->insertToLeft(newCustomer, positionToAdd);
+					}
+				}
 
 				orderOfCustomer(name, energy);
 			}
-		}
-		else if (numCustomers < MAXSIZE)
-		{
-			// cout << numCustomers << ' ' << MAXSIZE  << endl;
-			if (numCustomers < ceil(float(MAXSIZE) / 2))
+
+			else if (numCustomers >= MAXSIZE)
 			{
-				if (energy == 0)
-				{
-					cout << "Cut ra ngoai" << endl;
-					/* code */
-				}
-				else if (energy >= curCustomer->energy)
-				{
-					// cout << "Insert to table != 0: " << endl;
-
-					this->insertToRight(newCustomer, curCustomer);
-				}
-				else if (energy < curCustomer->energy)
-				{
-					// cout << "\nEnergy < 0\n";
-					this->insertToLeft(newCustomer, curCustomer);
-				}
+				// customer *cus = new customer(name, energy, nullptr, nullptr);
+				addCustomerInQueue(newCustomer);
 			}
-			else if (numCustomers >= ceil(float(MAXSIZE) / 2))
-			{
-				int diff = 0;
-				customer *positionToAdd = this->findMaxDifference(newCustomer, diff);
-
-				// cout << positionToAdd->name << " " << positionToAdd->energy << " " << diff << endl;
-
-				if (diff >= 0)
-				{
-					this->insertToRight(newCustomer, positionToAdd);
-				}
-				else if (diff < 0)
-				{
-					this->insertToLeft(newCustomer, positionToAdd);
-				}
-			}
-
-			orderOfCustomer(name, energy);
 		}
-
-		else if (numCustomers >= MAXSIZE)
-		{
-			// customer *cus = new customer(name, energy, nullptr, nullptr);
-			addCustomerInQueue(newCustomer);
-		}
-	}
-
+	
 	void checkNameOfCustomer(string name, int energy)
 	{
+		if (numCustomers == 0) this -> insertToTable(name, energy);
+		else 
+		{
 		customer *temp = curCustomer;
-		customer *newCustomer = new customer(name, energy, nullptr, nullptr);
 		// if (newCustomer -> name == curCustomer -> name) cout << "Cook" << endl;
 		while (temp->next != curCustomer)
 		{
-			if (newCustomer->name == temp->name)
-			{
-				cout << "Cook" << endl;
-			}
-			else
-			{
-				insertToTable(name, energy);
+			if (name != temp->name)
+				temp = temp->next;
+				// return;
+			else 
 				break;
-			}
-			temp = temp->next;
+		}
+		if (name != temp -> name) 
+			this -> insertToTable(name, energy);
 		}
 	}
 	void addCustomerInQueue(customer *newCustomer)
 	{
 		if (newCustomer->energy == 0)
 		{
-			cout << "Cook luon" << endl;
+			// cout << "Cook luon" << endl;
 			return;
 		}
 		if (currSizeQueue >= MAXSIZE)
 		{
-			cout << " Het cho trong hang cho roi cook" << endl;
+			// cout << " Het cho trong hang cho roi cook" << endl;
 			return;
 		}
 		else
@@ -325,7 +326,7 @@ public:
 
 		delete deleteNode;
 	}
-	
+
 	void deleteCustomerWithName(customer *listToDelete, customer *kickedCustomer)
 	{
 		// Delete kickedCustomer from table
@@ -382,7 +383,7 @@ public:
 			delete temp;
 		}
 	}
-	
+
 	void kickOutCustomer(int num)
 	{
 		// numAfterKick = numCustomers;
@@ -405,7 +406,7 @@ public:
 			temp1 = temp1->next;
 		}
 	}
-	
+
 	void orderofQueue(string name, int energy)
 	{
 		customer *newCustomer = new customer(name, energy, nullptr, nullptr);
@@ -420,7 +421,7 @@ public:
 		newCustomer->prev = tailQueue;
 		tailQueue = newCustomer;
 	}
-	
+
 	void swapCustomer(customer *cus1, customer *cus2)
 	{
 		customer *prevCus1 = cus1->prev;
@@ -448,10 +449,11 @@ public:
 			cus1->next = nextCus2;
 		}
 	}
-	
+
 	void purpleMurasaki(int countPurple)
 	{
-		if (currSizeQueue <= 1) return;
+		if (currSizeQueue <= 1)
+			return;
 		customer *checkAbsEnergy = headQueue;
 		customer *maxAbsEnergy;
 		int maxAbs = 0;
@@ -472,28 +474,36 @@ public:
 		int numSort = 0;
 		customer *temp = headQueue;
 		// customer *tempSort = headQueue;
-		if (maxAbsEnergy == headQueue) 
+		if (maxAbsEnergy == headQueue)
 			return;
-		while (temp != maxAbsEnergy -> next)
+		while (temp != maxAbsEnergy->next)
 		{
 			numSort++;
-			temp = temp -> next;
+			temp = temp->next;
 		}
 
 		int incr = numSort / 2;
-		while (incr > 0) {
+		while (incr > 0)
+		{
 			temp = headQueue;
-			while (temp != maxAbsEnergy -> next){
+			while (temp != maxAbsEnergy->next)
+			{
 				int count = 0;
-				customer *tempSort = temp -> next;
-				while (tempSort != maxAbsEnergy -> next){
+				customer *tempSort = temp->next;
+				while (tempSort != maxAbsEnergy->next)
+				{
 					count++;
-					if (count == incr){
+					if (count == incr)
+					{
 						count = 0;
-						if (abs(temp -> energy) < abs(tempSort -> energy) || (abs(temp -> energy) == abs(tempSort -> energy) && (temp -> prev -> energy > tempSort -> prev -> energy))) {
-							if (temp == headQueue) headQueue = tempSort;
-							if (tempSort == tailQueue) tailQueue = temp;
-							if (tempSort == maxAbsEnergy) maxAbsEnergy = temp;
+						if (abs(temp->energy) < abs(tempSort->energy) || (abs(temp->energy) == abs(tempSort->energy) && (temp->prev->energy > tempSort->prev->energy)))
+						{
+							if (temp == headQueue)
+								headQueue = tempSort;
+							if (tempSort == tailQueue)
+								tailQueue = temp;
+							if (tempSort == maxAbsEnergy)
+								maxAbsEnergy = temp;
 							swapInfo(temp, tempSort);
 							customer *tmp = temp;
 							temp = tempSort;
@@ -501,9 +511,9 @@ public:
 							countPurple++;
 						}
 					}
-					tempSort =  tempSort -> next;
+					tempSort = tempSort->next;
 				}
-				temp = temp -> next;
+				temp = temp->next;
 			}
 		}
 		incr /= 2;
@@ -518,7 +528,7 @@ public:
 		cus2->energy = tempEnergy;
 		cus2->name = tempName;
 	}
-	
+
 	void reversalTable()
 	{
 		customer *count = curCustomer;
@@ -668,7 +678,7 @@ public:
 			current = current->next;
 		}
 	}
-	
+
 	void printMinInSubString()
 	{
 		customer *flagCustomer = nullptr;
@@ -811,8 +821,8 @@ public:
 
 		temp1 = curCustomer;
 		temp2 = headQueue;
-		
-		// If not have any "chu su" hoac "oan linh" thi ket thuc 
+
+		// If not have any "chu su" hoac "oan linh" thi ket thuc
 		if (numCustomers == 0 || jujutsu == 0 || jurei == 0)
 		{
 			return;
@@ -844,14 +854,13 @@ public:
 			absSumCustomerEnergy += temp2->energy;
 		absSumCustomerEnergy = abs(absSumCustomerEnergy + sumJujutsuEnergy);
 		// đoạn trên tính tổng Energy chú thuật sư, trị tuyệt đối của tất cả chú linh
-		
+
 		if (sumJujutsuEnergy >= absSumCustomerEnergy)
 		{
 			// delete jurei
 			deleteInTableWithEnergy(false);
 			deleteInOrderOrQueueWithEnergy(false, headOrderTable);
 			deleteInOrderOrQueueWithEnergy(false, headQueue);
-
 		}
 		else if (sumJujutsuEnergy < absSumCustomerEnergy)
 		{
@@ -861,8 +870,9 @@ public:
 			deleteInOrderOrQueueWithEnergy(true, headQueue);
 		}
 	}
-	
-	void deleteInTable(customer* kickedCustomer){
+
+	void deleteInTable(customer *kickedCustomer)
+	{
 		// Delete kickedCustomer from table
 		customer *prevCustomer = kickedCustomer->prev;
 		customer *nextCustomer = kickedCustomer->next;
@@ -873,20 +883,27 @@ public:
 
 		delete kickedCustomer;
 	}
-	void deleteInTableWithEnergy(bool deleteJujutsu){
-		customer* temp = curCustomer;
-		customer* kickedCustomer = nullptr;
+	
+	void deleteInTableWithEnergy(bool deleteJujutsu)
+	{
+		customer *temp = curCustomer;
+		customer *kickedCustomer = nullptr;
 
-		while (temp->next != curCustomer){
-			if (deleteJujutsu){
-				if (temp->energy > 0){
+		while (temp->next != curCustomer)
+		{
+			if (deleteJujutsu)
+			{
+				if (temp->energy > 0)
+				{
 					kickedCustomer = temp;
 					temp = temp->next;
 					deleteInTable(kickedCustomer);
 				}
 			}
-			else if (!deleteJujutsu){
-				if (temp->energy < 0){
+			else if (!deleteJujutsu)
+			{
+				if (temp->energy < 0)
+				{
 					kickedCustomer = temp;
 					temp = temp->next;
 					deleteInTable(kickedCustomer);
@@ -894,19 +911,24 @@ public:
 			}
 		}
 
-		if (deleteJujutsu){
-			if (temp->energy > 0){
+		if (deleteJujutsu)
+		{
+			if (temp->energy > 0)
+			{
 				kickedCustomer = temp;
 				deleteInTable(kickedCustomer);
 			}
 		}
-		else if (!deleteJujutsu){
-			if (temp->energy < 0){
+		else if (!deleteJujutsu)
+		{
+			if (temp->energy < 0)
+			{
 				kickedCustomer = temp;
 				deleteInTable(kickedCustomer);
 			}
 		}
 	}
+	
 	void deleteInOrderOrQueueWithEnergy(bool check, customer *headList)
 	{
 		customer *temp = headList;
@@ -1007,45 +1029,46 @@ public:
 			}
 		}
 	}
-	
+
 	void RED(string name, int energy)
 	{
-		this->insertToTable(name, energy);
+		// this->insertToTable(name, energy);
 		// cout << headOrderTable << endl;
-		this->printTable();
+		// this->printTable();
 		// cout << this->numCustomers << endl;
+		this -> checkNameOfCustomer(name,energy);
 	}
 	void BLUE(int num)
 	{
-		cout << "blue " << num << endl;
-		this -> kickOutCustomer(num);
+		// cout << "blue " << num << endl;
+		this->kickOutCustomer(num);
 	}
 	void PURPLE()
 	{
-		cout << "purple" << endl;
+		// cout << "purple" << endl;
 		int countPurple = 0;
-		this -> purpleMurasaki(countPurple);
+		this->purpleMurasaki(countPurple);
 		BLUE(countPurple % MAXSIZE);
 	}
 	void REVERSAL()
 	{
-		cout << "reversal" << endl;
+		// cout << "reversal" << endl;
 		reversalTable();
-		this->printTable();
+		// this->printTable();
 	}
 	void UNLIMITED_VOID()
 	{
-		cout << "unlimited_void" << endl;
+		// cout << "unlimited_void" << endl;
 		this->printMinInSubString();
 	}
 	void DOMAIN_EXPANSION()
 	{
-		cout << "domain_expansion" << endl;
-		// this -> expansionKickOut();
+		// cout << "domain_expansion" << endl;
+		this -> expansionKickOut();
 	}
 	void LIGHT(int num)
 	{
-		cout << "light " << num << endl;
+		// cout << "light " << num << endl;
 		this->lightPrint(num);
 	}
 };
