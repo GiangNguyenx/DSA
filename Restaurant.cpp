@@ -21,7 +21,7 @@ private:
 public:
 	imp_res() : headQueue(nullptr), tailQueue(nullptr), curCustomer(nullptr), headOrderQ(nullptr), tailOrderQ(nullptr), numCustomers(0), currSizeQueue(0), jujutsu(0), jurei(0), numAfterKick(0) {}
 
-	// ~customer() 
+	// ~customer()
 	// {
 	// 	if (prev != NULL) {
 	// 		prev -> next = next;
@@ -33,6 +33,7 @@ public:
 	// 	next = NULL;
 	// 	delete this;
 	// }
+
 	customer *findMaxDifference(customer *newCustomer, int &rootDiff)
 	{
 		customer *temp = curCustomer;
@@ -62,6 +63,7 @@ public:
 		// cout << flagCustomer->name << endl;
 		return flagCustomer;
 	}
+
 	void printTable()
 	{
 		// cout << "Print table: " << headTable->next->name << endl;
@@ -96,6 +98,7 @@ public:
 		// Increse customer
 		numCustomers++;
 	}
+
 	void insertToRight(customer *newCustomer, customer *flagPostion)
 	{
 		// Get prev node of current customer
@@ -186,6 +189,7 @@ public:
 			addCustomerInQueue(newCustomer);
 		}
 	}
+
 	void checkNameOfCustomer(string name, int energy)
 	{
 		customer *temp = curCustomer;
@@ -272,6 +276,7 @@ public:
 
 		delete deleteNode;
 	}
+	
 	void deleteCustomer(customer *listToDelete, customer *kickedCustomer)
 	{
 		// Delete kickedCustomer from table
@@ -328,6 +333,7 @@ public:
 			delete temp;
 		}
 	}
+	
 	void kickOutCustomer(int num)
 	{
 		// numAfterKick = numCustomers;
@@ -350,6 +356,22 @@ public:
 			temp1 = temp1->next;
 		}
 	}
+	
+	void orderofQueue(string name, int energy)
+	{
+		customer *newCustomer = new customer(name, energy, nullptr, nullptr);
+		if (!headQueue)
+		{
+			headQueue = newCustomer;
+			tailQueue = newCustomer;
+			return;
+		}
+
+		tailQueue->next = newCustomer;
+		newCustomer->prev = tailQueue;
+		tailQueue = newCustomer;
+	}
+	
 	void swapCustomer(customer *cus1, customer *cus2)
 	{
 		customer *prevCus1 = cus1->prev;
@@ -377,84 +399,65 @@ public:
 			cus1->next = nextCus2;
 		}
 	}
-	void purpleMurasaki(int n, int incr)
+	
+	void purpleMurasaki(int countPurple)
 	{
-			customer *temp = headQueue;
-			customer *tempSort = headQueue;
-			if (n == 1)
-				return;
-			if (!temp)
-				return;
-			for (int i = 0; i < n; i++)
+		if (currSizeQueue <= 1) return;
+		customer *checkAbsEnergy = headQueue;
+		customer *maxAbsEnergy;
+		int maxAbs = 0;
+		while (checkAbsEnergy != tailQueue)
+		{
+			if (abs(checkAbsEnergy->energy) >= maxAbs)
 			{
-				temp = temp->next;
+				maxAbs = abs(checkAbsEnergy->energy);
+				maxAbsEnergy = checkAbsEnergy;
 			}
-			for (int i = incr; i < n; i++)
-			{
-				if (!temp)
-				{
-					break;
+			checkAbsEnergy = checkAbsEnergy->next;
+		}
+		if (abs(checkAbsEnergy->energy) >= maxAbs)
+		{
+			maxAbs = abs(checkAbsEnergy->energy);
+			maxAbsEnergy = checkAbsEnergy;
+		}
+		int numSort = 0;
+		customer *temp = headQueue;
+		// customer *tempSort = headQueue;
+		if (maxAbsEnergy == headQueue) 
+			return;
+		while (temp != maxAbsEnergy -> next)
+		{
+			numSort++;
+			temp = temp -> next;
+		}
+
+		int incr = numSort / 2;
+		while (incr > 0) {
+			temp = headQueue;
+			while (temp != maxAbsEnergy -> next){
+				int count = 0;
+				customer *tempSort = temp -> next;
+				while (tempSort != maxAbsEnergy -> next){
+					count++;
+					if (count == incr){
+						count = 0;
+						if (abs(temp -> energy) < abs(tempSort -> energy) || (abs(temp -> energy) == abs(tempSort -> energy) && (temp -> prev -> energy > tempSort -> prev -> energy))) {
+							if (temp == headQueue) headQueue = tempSort;
+							if (tempSort == tailQueue) tailQueue = temp;
+							if (tempSort == maxAbsEnergy) maxAbsEnergy = temp;
+							swapInfo(temp, tempSort);
+							customer *tmp = temp;
+							temp = tempSort;
+							tempSort = tmp;
+							countPurple++;
+						}
+					}
+					tempSort =  tempSort -> next;
 				}
-				tempSort = temp;
-				customer *current = temp->next;
-				customer *result = temp;
-				int j = i;
-				while (j >= 0 || i == j)
-				{
-					customer *save = tempSort->prev;
-					if (j % incr == i % incr)
-					{
-						result = tempSort;
-					}
-					if ((j % incr == i % incr) && (abs(result->energy) <= abs(temp->energy)))
-					{
-						if (abs(result->energy) < abs(temp->energy))
-						{
-							swapCustomer(result, temp);
-						}
-						else if (result->prev->energy > temp->prev->energy)
-						{
-							swapCustomer(result, temp);
-						}
-						if (!(result == temp || !result || !temp))
-						{
-							++currSizeQueue;
-						}
-					}
-					if ((j % incr == i % incr) && (abs(result->energy) >= abs(temp->energy)))
-					{
-						break;
-					}
-					tempSort = save;
-					--j;
-				}
-				temp = current;
+				temp = temp -> next;
 			}
-		// customer *checkAbsEnergy = headQueue;
-		// customer *maxAbsEnergy;
-		// int maxAbs = 0;
-		// while (checkAbsEnergy != tailQueue)
-		// {
-		// 	if (abs(checkAbsEnergy->energy) >= maxAbs)
-		// 	{
-		// 		maxAbs = abs(checkAbsEnergy->energy);
-		// 		maxAbsEnergy = checkAbsEnergy;
-		// 	}
-		// 	checkAbsEnergy = checkAbsEnergy->next;
-		// }
-		// if (abs(checkAbsEnergy->energy) >= maxAbs)
-		// {
-		// 	maxAbs = abs(checkAbsEnergy->energy);
-		// 	maxAbsEnergy = checkAbsEnergy;
-		// }
-		// // insertion sort
-		// customer *segmentCheck = headQueue->next;
-		// while (segmentCheck != maxAbsEnergy)
-		// {
-		// 	int keyEnergy = headQueue->next->energy;
-		// 	customer *tempSegment = segmentCheck->prev;
-		// 	while (tempSegment !=)
-		// }
+		}
+		incr /= 2;
 	}
 
 	void swapInfo(customer *cus1, customer *cus2)
@@ -466,6 +469,7 @@ public:
 		cus2->energy = tempEnergy;
 		cus2->name = tempName;
 	}
+	
 	void reversalTable()
 	{
 		customer *count = curCustomer;
@@ -615,6 +619,7 @@ public:
 			current = current->next;
 		}
 	}
+	
 	void printMinInSubString()
 	{
 		customer *flagCustomer = nullptr;
@@ -783,14 +788,15 @@ public:
 			sumJujutsuEnergy += temp2->energy;
 		else
 			absSumCustomerEnergy += temp2->energy;
-		absSumCustomerEnergy = abs (absSumCustomerEnergy + sumJujutsuEnergy);
+		absSumCustomerEnergy = abs(absSumCustomerEnergy + sumJujutsuEnergy);
+
 		if (sumJujutsuEnergy >= absSumCustomerEnergy)
 		{
 			// delete jurei
 		}
 		else if (sumJujutsuEnergy < absSumCustomerEnergy)
 		{
-			//delete jujutsu
+			// delete jujutsu
 		}
 	}
 	void deleteInOrderOrQueue(bool check, customer *headList)
@@ -893,6 +899,7 @@ public:
 			}
 		}
 	}
+	
 	void RED(string name, int energy)
 	{
 		this->insertToTable(name, energy);
@@ -907,27 +914,8 @@ public:
 	void PURPLE()
 	{
 		cout << "purple" << endl;
-		int index = 0;
 		int countPurple = 0;
-		int maxValue = 0;
-		customer *temp = headQueue;
-		for (int i = 0; i < currSizeQueue; i++)
-		{
-			if (abs(temp->energy) >= maxValue)
-			{
-				index = i;
-				maxValue = abs(maxValue);
-			}
-			temp = temp->next;
-		}
-		for (int i = index / 2; i > 0; i /= 2)
-		{
-			for (int j = 0; j < i; j++)
-			{
-				this->purpleMurasaki(index - j, i);
-			}
-		}
-		this->purpleMurasaki(index, 1);
+		this -> purpleMurasaki(countPurple);
 		BLUE(countPurple % MAXSIZE);
 	}
 	void REVERSAL()
