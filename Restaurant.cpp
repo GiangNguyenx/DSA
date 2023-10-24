@@ -1032,43 +1032,43 @@ public:
 
 	void RED(string name, int energy)
 	{
-		// this->insertToTable(name, energy);
+		this->insertToTable(name, energy);
 		// cout << headOrderTable << endl;
 		// this->printTable();
 		// cout << this->numCustomers << endl;
-		this -> checkNameOfCustomer(name,energy);
+		// this -> checkNameOfCustomer(name,energy);
 	}
 	void BLUE(int num)
 	{
-		// cout << "blue " << num << endl;
+		cout << "blue " << num << endl;
 		this->kickOutCustomer(num);
 	}
 	void PURPLE()
 	{
-		// cout << "purple" << endl;
+		cout << "purple" << endl;
 		int countPurple = 0;
 		this->purpleMurasaki(countPurple);
 		BLUE(countPurple % MAXSIZE);
 	}
 	void REVERSAL()
 	{
-		// cout << "reversal" << endl;
+		cout << "reversal" << endl;
 		reversalTable();
-		// this->printTable();
+		this->printTable();
 	}
 	void UNLIMITED_VOID()
 	{
-		// cout << "unlimited_void" << endl;
+		cout << "unlimited_void" << endl;
 		this->printMinInSubString();
 	}
 	void DOMAIN_EXPANSION()
 	{
-		// cout << "domain_expansion" << endl;
+		cout << "domain_expansion" << endl;
 		this -> expansionKickOut();
 	}
 	void LIGHT(int num)
 	{
-		// cout << "light " << num << endl;
+		cout << "light " << num << endl;
 		this->lightPrint(num);
 	}
 };
