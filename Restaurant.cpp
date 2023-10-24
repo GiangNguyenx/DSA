@@ -15,11 +15,60 @@ private:
 	customer *curCustomer;
 	customer *headQueue;
 	customer *tailQueue;
+	customer *headOrderTable;
+	customer *tailOrderTable;
 	customer *headOrderQ;
 	customer *tailOrderQ;
 
 public:
-	imp_res() : headQueue(nullptr), tailQueue(nullptr), curCustomer(nullptr), headOrderQ(nullptr), tailOrderQ(nullptr), numCustomers(0), currSizeQueue(0), jujutsu(0), jurei(0), numAfterKick(0) {}
+	imp_res() : headQueue(nullptr), tailQueue(nullptr), curCustomer(nullptr), headOrderTable(nullptr), tailOrderTable(nullptr), headOrderQ(nullptr), tailOrderQ(nullptr), numCustomers(0), currSizeQueue(0), jujutsu(0), jurei(0), numAfterKick(0) {}
+
+	~imp_res() {
+		customer *temp = curCustomer -> next;
+		customer *tempQ = headQueue;
+		customer *tempOT = headOrderTable;
+		customer *tempOQ = headOrderQ;
+		if (numCustomers == 1) temp = NULL;
+		customer *current;
+		while (temp != curCustomer)
+		{
+			current = temp;
+			temp = temp -> next;
+			delete current;
+		}
+		delete curCustomer;
+		curCustomer = NULL;
+
+		while (tempQ != NULL)
+		{
+			customer *cur = tempQ;
+			tempQ = tempQ -> next;
+			delete cur;
+		}
+		tempQ = NULL;
+		headQueue = NULL;
+		tailQueue = NULL;
+
+		while (tempOT != NULL)
+		{
+			customer *cur = tempOT;
+			tempOT = tempOT -> next;
+			delete cur;
+		}
+		tempOT = NULL;
+		headOrderTable = NULL;
+		tailOrderTable = NULL;
+
+		while (tempOQ != NULL)
+		{
+			customer *cur = tempOQ;
+			tempOQ = tempOQ -> next;
+			delete cur;
+		}
+		tempOQ = NULL;
+		headOrderQ = NULL;
+		tailOrderQ = NULL;
+	}
 
 	customer *findMaxDifference(customer *newCustomer, int &rootDiff)
 	{
@@ -177,6 +226,7 @@ public:
 		}
 	}
 
+	~table(){}
 
 	void checkNameOfCustomer(string name, int energy)
 	{
@@ -229,16 +279,16 @@ public:
 	void orderOfCustomer(string name, int energy)
 	{
 		customer *newCustomer = new customer(name, energy, nullptr, nullptr);
-		if (!headOrderQ)
+		if (!headOrderTable)
 		{
-			headOrderQ = newCustomer;
-			tailOrderQ = newCustomer;
+			headOrderTable = newCustomer;
+			tailOrderTable = newCustomer;
 			return;
 		}
 
-		tailOrderQ->next = newCustomer;
-		newCustomer->prev = tailOrderQ;
-		tailOrderQ = newCustomer;
+		tailOrderTable->next = newCustomer;
+		newCustomer->prev = tailOrderTable;
+		tailOrderTable = newCustomer;
 	}
 
 	void inserAfterKick()
@@ -325,7 +375,7 @@ public:
 	void kickOutCustomer(int num)
 	{
 		// numAfterKick = numCustomers;
-		customer *temp1 = headOrderQ;
+		customer *temp1 = headOrderTable;
 		customer *temp2 = curCustomer;
 		if (num >= numCustomers || num >= MAXSIZE)
 		{
@@ -339,7 +389,7 @@ public:
 		{
 			// cout << temp1->name << endl;
 			this->deleteCustomer(curCustomer, temp1);
-			if (temp1 == tailOrderQ)
+			if (temp1 == tailOrderTable)
 				break;
 			temp1 = temp1->next;
 		}
@@ -706,7 +756,7 @@ public:
 		customer *temp = curCustomer->prev;
 		customer *temp1 = curCustomer;
 		customer *temp2 = headQueue;
-		customer *temp3 = headOrderQ;
+		customer *temp3 = headOrderTable;
 		int sumJujutsuEnergy = 0;
 		int absSumCustomerEnergy = 0;
 		while (temp1->next != curCustomer)
@@ -895,7 +945,7 @@ public:
 	void RED(string name, int energy)
 	{
 		this->insertToTable(name, energy);
-		// cout << headOrderQ << endl;
+		// cout << headOrderTable << endl;
 		this->printTable();
 		// cout << this->numCustomers << endl;
 	}

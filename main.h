@@ -34,20 +34,7 @@ public:
 	public:
 		customer() {}
 		customer(string na, int e, customer *p, customer *ne) : name(na), energy(e), prev(p), next(ne) {}
-		~customer()
-		{
-			if (prev != NULL)
-			{
-				prev->next = next;
-			}
-			if (next != NULL)
-			{
-				next->prev = prev;
-			}
-			prev = NULL;
-			next = NULL;
-			delete this;
-		}
+		~customer(){}
 		void print()
 		{
 			cout << name << "-" << energy << endl;
