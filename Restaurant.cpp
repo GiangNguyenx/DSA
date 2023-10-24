@@ -28,16 +28,29 @@ public:
 		customer *tempQ = headQueue;
 		customer *tempOT = headOrderTable;
 		customer *tempOQ = headOrderQ;
-		if (numCustomers == 1) temp = NULL;
-		customer *current;
+
+		if (curCustomer == NULL) 
+		{
+			temp = NULL;
+			return;
+		}
+		if (curCustomer -> next == curCustomer) 
+		{
+			delete curCustomer;
+			temp = NULL;
+			return;
+		}
+		customer *tmp;
 		while (temp != curCustomer)
 		{
-			current = temp;
+			tmp = temp;
 			temp = temp -> next;
-			delete current;
+			delete tmp;
 		}
 		delete curCustomer;
 		curCustomer = NULL;
+		tmp = NULL;
+		temp = NULL;
 
 		while (tempQ != NULL)
 		{
@@ -225,8 +238,6 @@ public:
 			addCustomerInQueue(newCustomer);
 		}
 	}
-
-	~table(){}
 
 	void checkNameOfCustomer(string name, int energy)
 	{
