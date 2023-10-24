@@ -326,7 +326,7 @@ public:
 		delete deleteNode;
 	}
 	
-	void deleteCustomer(customer *listToDelete, customer *kickedCustomer)
+	void deleteCustomerWithName(customer *listToDelete, customer *kickedCustomer)
 	{
 		// Delete kickedCustomer from table
 		if (!listToDelete)
@@ -399,7 +399,7 @@ public:
 		for (int i = 0; i < num; i++)
 		{
 			// cout << temp1->name << endl;
-			this->deleteCustomer(curCustomer, temp1);
+			this->deleteCustomerWithName(curCustomer, temp1);
 			if (temp1 == tailOrderTable)
 				break;
 			temp1 = temp1->next;
@@ -811,10 +811,13 @@ public:
 
 		temp1 = curCustomer;
 		temp2 = headQueue;
+		
+		// If not have any "chu su" hoac "oan linh" thi ket thuc 
 		if (numCustomers == 0 || jujutsu == 0 || jurei == 0)
 		{
 			return;
 		}
+
 		while (temp1->next != curCustomer)
 		{
 			if (temp1->energy > 0)
@@ -845,14 +848,66 @@ public:
 		if (sumJujutsuEnergy >= absSumCustomerEnergy)
 		{
 			// delete jurei
+			deleteInTableWithEnergy(false);
+			deleteInOrderOrQueueWithEnergy(false, headOrderTable);
+			deleteInOrderOrQueueWithEnergy(false, headQueue);
+
 		}
 		else if (sumJujutsuEnergy < absSumCustomerEnergy)
 		{
 			// delete jujutsu
+			deleteInTableWithEnergy(true);
+			deleteInOrderOrQueueWithEnergy(true, headOrderTable);
+			deleteInOrderOrQueueWithEnergy(true, headQueue);
 		}
 	}
 	
-	void deleteInOrderOrQueue(bool check, customer *headList)
+	void deleteInTable(customer* kickedCustomer){
+		// Delete kickedCustomer from table
+		customer *prevCustomer = kickedCustomer->prev;
+		customer *nextCustomer = kickedCustomer->next;
+
+		// Connect prev to next
+		prevCustomer->next = nextCustomer;
+		nextCustomer->prev = prevCustomer;
+
+		delete kickedCustomer;
+	}
+	void deleteInTableWithEnergy(bool deleteJujutsu){
+		customer* temp = curCustomer;
+		customer* kickedCustomer = nullptr;
+
+		while (temp->next != curCustomer){
+			if (deleteJujutsu){
+				if (temp->energy > 0){
+					kickedCustomer = temp;
+					temp = temp->next;
+					deleteInTable(kickedCustomer);
+				}
+			}
+			else if (!deleteJujutsu){
+				if (temp->energy < 0){
+					kickedCustomer = temp;
+					temp = temp->next;
+					deleteInTable(kickedCustomer);
+				}
+			}
+		}
+
+		if (deleteJujutsu){
+			if (temp->energy > 0){
+				kickedCustomer = temp;
+				deleteInTable(kickedCustomer);
+			}
+		}
+		else if (!deleteJujutsu){
+			if (temp->energy < 0){
+				kickedCustomer = temp;
+				deleteInTable(kickedCustomer);
+			}
+		}
+	}
+	void deleteInOrderOrQueueWithEnergy(bool check, customer *headList)
 	{
 		customer *temp = headList;
 		if (!check)
