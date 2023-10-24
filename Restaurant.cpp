@@ -240,6 +240,7 @@ public:
 			}
 		}
 	
+	// need fix
 	void checkNameOfCustomer(string name, int energy)
 	{
 		if (numCustomers == 0) this -> insertToTable(name, energy);
@@ -259,6 +260,7 @@ public:
 			this -> insertToTable(name, energy);
 		}
 	}
+
 	void addCustomerInQueue(customer *newCustomer)
 	{
 		if (newCustomer->energy == 0)

@@ -24,6 +24,7 @@ LIGHT -1
 RED kw 2
 LIGHT 0
 RED dy 7
+dy la khach thu 13 > MAXSIZE/2 nhung khong them vao theo cach >= MAXSIZE/2
 LIGHT -1
 RED bg -8
 LIGHT 0
