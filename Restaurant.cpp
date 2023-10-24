@@ -21,19 +21,6 @@ private:
 public:
 	imp_res() : headQueue(nullptr), tailQueue(nullptr), curCustomer(nullptr), headOrderQ(nullptr), tailOrderQ(nullptr), numCustomers(0), currSizeQueue(0), jujutsu(0), jurei(0), numAfterKick(0) {}
 
-	// ~customer()
-	// {
-	// 	if (prev != NULL) {
-	// 		prev -> next = next;
-	// 	}
-	// 	if (next != NULL) {
-	// 		next -> prev = prev;
-	// 	}
-	// 	prev = NULL;
-	// 	next = NULL;
-	// 	delete this;
-	// }
-
 	customer *findMaxDifference(customer *newCustomer, int &rootDiff)
 	{
 		customer *temp = curCustomer;
@@ -189,6 +176,7 @@ public:
 			addCustomerInQueue(newCustomer);
 		}
 	}
+
 
 	void checkNameOfCustomer(string name, int energy)
 	{
