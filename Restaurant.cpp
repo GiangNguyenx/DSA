@@ -758,6 +758,8 @@ public:
 		else
 			jurei++;
 		// cout << jujutsu << " " << jurei << endl;
+		// tính tổng chú thuật sư và oán linh có mặt trong nhà hàng
+
 		temp1 = curCustomer;
 		temp2 = headQueue;
 		if (numCustomers == 0 || jujutsu == 0 || jurei == 0)
@@ -789,7 +791,8 @@ public:
 		else
 			absSumCustomerEnergy += temp2->energy;
 		absSumCustomerEnergy = abs(absSumCustomerEnergy + sumJujutsuEnergy);
-
+		// đoạn trên tính tổng Energy chú thuật sư, trị tuyệt đối của tất cả chú linh
+		
 		if (sumJujutsuEnergy >= absSumCustomerEnergy)
 		{
 			// delete jurei
@@ -799,6 +802,7 @@ public:
 			// delete jujutsu
 		}
 	}
+	
 	void deleteInOrderOrQueue(bool check, customer *headList)
 	{
 		customer *temp = headList;
@@ -910,6 +914,7 @@ public:
 	void BLUE(int num)
 	{
 		cout << "blue " << num << endl;
+		this -> kickOutCustomer(num);
 	}
 	void PURPLE()
 	{
