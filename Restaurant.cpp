@@ -1069,6 +1069,7 @@ public:
 	{
 		cout << "blue " << num << endl;
 		this->kickOutCustomer(num);
+		this->inserAfterKick();
 	}
 	void PURPLE()
 	{
