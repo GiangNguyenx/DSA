@@ -114,21 +114,21 @@ public:
 		return flagCustomer;
 	}
 
-	void printTable()
-	{
-		// cout << "Print table: " << headTable->next->name << endl;
-		customer *temp = curCustomer;
+	// void printTable()
+	// {
+	// 	// cout << "Print table: " << headTable->next->name << endl;
+	// 	customer *temp = curCustomer;
 
-		while (temp->next != curCustomer)
-		{
-			cout << temp->name << '/' << temp->energy;
-			if (temp->next != nullptr)
-				cout << " -> ";
-			temp = temp->next;
-		}
-		cout << temp->name << '/' << temp->energy;
-		cout << endl;
-	}
+	// 	while (temp->next != curCustomer)
+	// 	{
+	// 		cout << temp->name << '/' << temp->energy;
+	// 		if (temp->next != nullptr)
+	// 			cout << " -> ";
+	// 		temp = temp->next;
+	// 	}
+	// 	cout << temp->name << '/' << temp->energy;
+	// 	cout << endl;
+	// }
 
 	void insertToLeft(customer *newCustomer, customer *flagPostion)
 	{
@@ -553,7 +553,7 @@ public:
 				jurei++;
 			count = count->next;
 		}
-		cout << jujutsu << " " << jurei << endl;
+		// cout << jujutsu << " " << jurei << endl;
 		while (temp2->energy > 0)
 		{
 			if (curCustomer->energy < 0)
@@ -705,10 +705,10 @@ public:
 			temp = curCustomer;
 			while (temp->next != curCustomer)
 			{
-				cout << temp->name << "-" << temp->energy << endl;
+				temp ->print();
 				temp = temp->next;
 			}
-			cout << temp->name << "-" << temp->energy << endl;
+			temp -> print();
 		}
 		else
 		{
@@ -758,10 +758,10 @@ public:
 			}
 			while (flagFirst->next != minCustomer)
 			{
-				cout << flagFirst->name << "-" << flagFirst->energy << endl;
+				flagFirst -> print();
 				flagFirst = flagFirst->next;
 			}
-			cout << flagFirst->name << "-" << flagFirst->energy << endl;
+			flagFirst -> print();
 		}
 	}
 
@@ -846,7 +846,7 @@ public:
 		else
 			absSumCustomerEnergy += temp1->energy;
 		// 
-		cout << numCustomers << " " << jurei << endl;
+		// cout << numCustomers << " " << jurei << endl;
 		if (headQueue){
 			while (temp2->next != nullptr)
 			{
@@ -867,7 +867,7 @@ public:
 		if (sumJujutsuEnergy >= absSumCustomerEnergy)
 		{
 			// delete jurei
-			cout << numCustomers << " " << jurei << endl;
+			// cout << numCustomers << " " << jurei << endl;
 			deleteInTableWithEnergy(false);
 			deleteInOrderOrQueueWithEnergy(false, headOrderTable);
 			deleteInOrderOrQueueWithEnergy(false, headQueue);
@@ -951,6 +951,7 @@ public:
 	
 	void deleteInOrderOrQueueWithEnergy(bool check, customer *headList)
 	{
+		if (numCustomers == 0 || currSizeQueue == 0) return;
 		if (!headList) return;
 		
 		customer *temp = headList;
@@ -975,7 +976,7 @@ public:
 					{
 						temp->next->prev = temp->prev;
 					}
-					cout << temp->name << "-" << temp->energy << endl;
+					temp -> print();
 					delete temp;
 				}
 				temp = temp->next;
@@ -1006,7 +1007,7 @@ public:
 					{
 						temp->next->prev = temp->prev;
 					}
-					cout << temp->name << "-" << temp->energy << endl;
+					temp -> print();
 					delete temp;
 				}
 				temp = temp->next;
@@ -1024,19 +1025,19 @@ public:
 		{
 			while (temp1->next != curCustomer)
 			{
-				cout << temp1->name << "-" << temp1->energy << endl;
+				temp1 -> print();
 				temp1 = temp1->next;
 			}
-			cout << temp1->name << "-" << temp1->energy << endl;
+			temp1 -> print();
 		}
 		else if (num < 0)
 		{
 			while (temp1->prev != curCustomer)
 			{
-				cout << temp1->name << "-" << temp1->energy << endl;
+				temp1 -> print();
 				temp1 = temp1->prev;
 			}
-			cout << temp1->name << "-" << temp1->energy << endl;
+			temp1 -> print();
 		}
 		else
 		{
@@ -1046,10 +1047,10 @@ public:
 			{
 				while (temp2->next != nullptr)
 				{
-					cout << temp2->name << "-" << temp2->energy << endl;
+					temp2 -> print();
 					temp2 = temp2->next;
 				}
-				cout << temp2->name << "-" << temp2->energy << endl;
+				temp2 -> print();
 			}
 		}
 	}
@@ -1080,7 +1081,6 @@ public:
 	{
 		cout << "reversal" << endl;
 		reversalTable();
-		this->printTable();
 	}
 	void UNLIMITED_VOID()
 	{
