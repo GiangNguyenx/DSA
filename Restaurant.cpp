@@ -241,24 +241,16 @@ public:
 		}
 	
 	// need fix
-	void checkNameOfCustomer(string name, int energy)
+	bool checkDuplicatedNameInTable(string name)
 	{
-		if (numCustomers == 0) this -> insertToTable(name, energy);
-		else 
-		{
-		customer *temp = curCustomer;
-		// if (newCustomer -> name == curCustomer -> name) cout << "Cook" << endl;
-		while (temp->next != curCustomer)
-		{
-			if (name != temp->name)
-				temp = temp->next;
-				// return;
-			else 
-				break;
-		}
-		if (name != temp -> name) 
-			this -> insertToTable(name, energy);
-		}
+		if (numCustomers == 0) return true;
+
+		customer* temp = curCustomer;
+
+		while (temp->next != curCustomer){
+			if (name == temp->name) return false;
+			temp = temp->next;
+		} 
 	}
 
 	void addCustomerInQueue(customer *newCustomer)
@@ -1034,7 +1026,9 @@ public:
 
 	void RED(string name, int energy)
 	{
-		this->insertToTable(name, energy);
+		if (checkDuplicatedNameInTable(name) && energy != 0){
+			this->insertToTable(name, energy);
+		}
 		// cout << headOrderTable << endl;
 		// this->printTable();
 		// cout << this->numCustomers << endl;
