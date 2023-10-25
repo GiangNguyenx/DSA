@@ -775,6 +775,9 @@ public:
 		customer *temp3 = headOrderTable;
 		int sumJujutsuEnergy = 0;
 		int absSumCustomerEnergy = 0;
+
+		if (numCustomers == 0 || !curCustomer) return;
+		
 		while (temp1->next != curCustomer)
 		{
 			if (temp1->energy > 0)
@@ -788,30 +791,37 @@ public:
 				temp1 = temp1->next;
 			}
 		}
+		// cout << jujutsu << " " << jurei << endl;
 		if (temp1->energy > 0)
 			jujutsu++;
 		else
 			jurei++;
 		int jujutsuInTable = jujutsu;
 		int jureiInTable = jurei;
-		while (temp2->next != nullptr)
-		{
+		// cout << numCustomers << " " << jurei << endl;
+		
+		if (headQueue){
+			while (temp2->next != nullptr)
+			{
+				if (temp2->energy > 0)
+				{
+					jujutsu++;
+					temp2 = temp2->next;
+				}
+				else
+				{
+					jurei++;
+					temp2 = temp2->next;
+				}
+			}
+
 			if (temp2->energy > 0)
-			{
 				jujutsu++;
-				temp2 = temp2->next;
-			}
 			else
-			{
 				jurei++;
-				temp2 = temp2->next;
-			}
 		}
-		if (temp2->energy > 0)
-			jujutsu++;
-		else
-			jurei++;
-		// cout << jujutsu << " " << jurei << endl;
+
+		// cout << numCustomers << " " << jurei << endl;
 		// tính tổng chú thuật sư và oán linh có mặt trong nhà hàng
 
 		temp1 = curCustomer;
@@ -835,24 +845,29 @@ public:
 			sumJujutsuEnergy += temp1->energy;
 		else
 			absSumCustomerEnergy += temp1->energy;
-		while (temp2->next != nullptr)
-		{
-			if (temp2->energy < 0)
-				absSumCustomerEnergy += temp2->energy;
-			else
+		// 
+		cout << numCustomers << " " << jurei << endl;
+		if (headQueue){
+			while (temp2->next != nullptr)
+			{
+				if (temp2->energy < 0)
+					absSumCustomerEnergy += temp2->energy;
+				else
+					sumJujutsuEnergy += temp2->energy;
+				temp2 = temp2->next;
+			}
+			if (temp2->energy > 0)
 				sumJujutsuEnergy += temp2->energy;
-			temp2 = temp2->next;
+			else
+				absSumCustomerEnergy += temp2->energy;
 		}
-		if (temp2->energy > 0)
-			sumJujutsuEnergy += temp2->energy;
-		else
-			absSumCustomerEnergy += temp2->energy;
 		absSumCustomerEnergy = abs(absSumCustomerEnergy + sumJujutsuEnergy);
 		// đoạn trên tính tổng Energy chú thuật sư, trị tuyệt đối của tất cả chú linh
 
 		if (sumJujutsuEnergy >= absSumCustomerEnergy)
 		{
 			// delete jurei
+			cout << numCustomers << " " << jurei << endl;
 			deleteInTableWithEnergy(false);
 			deleteInOrderOrQueueWithEnergy(false, headOrderTable);
 			deleteInOrderOrQueueWithEnergy(false, headQueue);
@@ -868,6 +883,10 @@ public:
 
 	void deleteInTable(customer *kickedCustomer)
 	{
+		if (kickedCustomer == curCustomer){
+			curCustomer = curCustomer->next;
+		}
+
 		// Delete kickedCustomer from table
 		customer *prevCustomer = kickedCustomer->prev;
 		customer *nextCustomer = kickedCustomer->next;
@@ -894,6 +913,9 @@ public:
 					temp = temp->next;
 					deleteInTable(kickedCustomer);
 				}
+				else {
+					temp = temp->next;
+				}
 			}
 			else if (!deleteJujutsu)
 			{
@@ -902,6 +924,9 @@ public:
 					kickedCustomer = temp;
 					temp = temp->next;
 					deleteInTable(kickedCustomer);
+				}
+				else {
+					temp = temp->next;
 				}
 			}
 		}
@@ -926,7 +951,10 @@ public:
 	
 	void deleteInOrderOrQueueWithEnergy(bool check, customer *headList)
 	{
+		if (!headList) return;
+		
 		customer *temp = headList;
+
 		if (!check)
 		{
 			for (int i = 0; i < numCustomers; i++)
