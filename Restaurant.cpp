@@ -250,7 +250,8 @@ public:
 		while (temp->next != curCustomer){
 			if (name == temp->name) return false;
 			temp = temp->next;
-		} 
+		}
+		return true; 
 	}
 
 	void addCustomerInQueue(customer *newCustomer)
@@ -989,6 +990,7 @@ public:
 	{
 		customer *temp1 = curCustomer;
 		customer *temp2 = headQueue;
+		if (numCustomers == 0) return;
 		// cout << temp2 -> name << "-" << temp2 -> energy << endl;
 		if (num > 0)
 		{
