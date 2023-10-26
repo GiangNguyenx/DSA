@@ -472,7 +472,7 @@ public:
 		if (currSizeQueue <= 1 || numCustomers == 0)
 			return;
 		countPurple = 0;
-		cout << countPurple << endl;
+		// cout << countPurple << endl;
 		customer *checkAbsEnergy = headQueue;
 		customer *maxAbsEnergy = nullptr;
 		int numSort = 0;
@@ -511,12 +511,8 @@ public:
 							if (tempSort == maxAbsEnergy)
 								maxAbsEnergy = checkAbsEnergy;
 							swapInfo(checkAbsEnergy, tempSort);
-							customer *tmp = checkAbsEnergy;
-							checkAbsEnergy= tempSort;
-							tempSort = tmp;
-							// swapCustomer(checkAbsEnergy, tempSort);
 							countPurple++;
-							cout << countPurple << endl;
+							// cout << countPurple << endl;
 						}
 					}
 					tempSort = tempSort->next;
@@ -524,8 +520,8 @@ public:
 			}
 			incr /= 2;
 		}
-		cout << countPurple % MAXSIZE<< endl;
 	}
+
 
 	void swapInfo(customer *cus1, customer *cus2)
 	{
@@ -1106,14 +1102,13 @@ public:
 	}
 	void BLUE(int num)
 	{
-		cout << "blue " << num << endl;
+		// cout << "blue " << num << endl;
 		this->kickOutCustomer(num);
-		cout << headQueue -> name << endl;
 		this->insertAfterKick();
 	}
 	void PURPLE()
 	{
-		cout << "purple" << endl;
+		// cout << "purple" << endl;
 		this->purpleMurasaki();
 		BLUE(countPurple % MAXSIZE);
 		this->insertAfterKick();
@@ -1125,18 +1120,18 @@ public:
 	}
 	void UNLIMITED_VOID()
 	{
-		cout << "unlimited_void" << endl;
+		// cout << "unlimited_void" << endl;
 		this->printMinInSubString();
 	}
 	void DOMAIN_EXPANSION()
 	{
-		cout << "domain_expansion" << endl;
+		// cout << "domain_expansion" << endl;
 		this->expansionKickOut();
 		this->insertAfterKick();
 	}
 	void LIGHT(int num)
 	{
-		cout << "light " << num << endl;
+		// cout << "light " << num << endl;
 		this->lightPrint(num);
 	}
 };
