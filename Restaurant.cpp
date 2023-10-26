@@ -980,11 +980,13 @@ public:
 			return;
 
 		customer *temp = headList;
+		customer* deletedCustomer = nullptr;
 
 		if (!check)
 		{
-			for (int i = 0; i < numCustomers; i++)
+			for (int i = 0; i < numCustomers && temp; i++)
 			{
+				cout << "Temp: " << temp->name << endl;
 				if (temp->energy < 0)
 				{
 					if (temp == headList)
@@ -1004,13 +1006,18 @@ public:
 					cout << "bug" << endl;
 					temp->print();
 					cout << "bug in delete order / queue"<< endl;
-					delete temp;
+					deletedCustomer = temp;
+					temp = temp->next;
+					delete deletedCustomer;
 					cout << "debug" << endl;
 					// cout << "bug"<< endl;
 				}
-				temp = temp->next;
+				else{
+					temp = temp->next;
+				}
 				// if (temp == nullptr) break;
 			}
+			deletedCustomer = nullptr;
 			// temp = headList;
 			// while (temp -> next != nullptr){
 			// 	cout << temp -> name << " " << temp ->energy << endl;
@@ -1019,7 +1026,7 @@ public:
 		}
 		else
 		{
-			for (int i = 0; i < numCustomers; i++)
+			for (int i = 0; i < numCustomers && temp; i++)
 			{
 				if (temp->energy > 0)
 				{
@@ -1039,9 +1046,14 @@ public:
 					}
 					temp->print();
 					// cout << "bug"<< endl;
-					delete temp;
+					deletedCustomer = temp;
+					temp = temp->next;
+					delete deletedCustomer;
 				}
-				temp = temp->next;
+				else{
+					temp = temp->next;
+				}
+				deletedCustomer = nullptr;
 				// if (temp == nullptr) break;
 			}
 		}
