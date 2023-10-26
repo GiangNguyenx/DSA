@@ -31,6 +31,7 @@ public:
 		customer *tempOT = headOrderTable;
 		customer *tempOQ = headOrderQ;
 
+		cout << temp->name << " " << tempQ->name << " " << tempOQ->name << " " << tempOQ->name << " " << tempOQ->name << endl;
 		if (curCustomer == NULL)
 		{
 			temp = NULL;
@@ -50,35 +51,40 @@ public:
 			delete tmp;
 		}
 		delete curCustomer;
+		cout << "Deleted curCustomer\n";
 		curCustomer = NULL;
 		tmp = NULL;
 		temp = NULL;
 
-		while (tempQ && tempQ != NULL)
+		while (tempQ != NULL)
 		{
 			customer *cur = tempQ;
 			tempQ = tempQ->next;
+			cout << cur->name << "Deleted tempQ\n";
 			delete cur;
+			cur = nullptr;
 		}
 		tempQ = NULL;
 		headQueue = NULL;
 		tailQueue = NULL;
-
-		while (tempOT && tempOT != NULL)
+		
+		while (tempOT != NULL)
 		{
 			customer *cur = tempOT;
 			tempOT = tempOT->next;
 			delete cur;
+			cout << "Deleted tempOT\n";
 		}
 		tempOT = NULL;
 		headOrderTable = NULL;
 		tailOrderTable = NULL;
 
-		while (tempOQ && tempOQ != NULL)
+		while (tempOQ != NULL)
 		{
 			customer *cur = tempOQ;
 			tempOQ = tempOQ->next;
 			delete cur;
+			cout << "Deleted tempOQ\n";
 		}
 		tempOQ = NULL;
 		headOrderQ = NULL;
