@@ -11,6 +11,7 @@ private:
 	int jujutsu;
 	int jurei;
 	int numAfterKick;
+	int countPurple;
 	// customer *curCustomer;
 	customer *curCustomer;
 	customer *headQueue;
@@ -21,7 +22,7 @@ private:
 	customer *tailOrderQ;
 
 public:
-	imp_res() : headQueue(nullptr), tailQueue(nullptr), curCustomer(nullptr), headOrderTable(nullptr), tailOrderTable(nullptr), headOrderQ(nullptr), tailOrderQ(nullptr), numCustomers(0), currSizeQueue(0), jujutsu(0), jurei(0), numAfterKick(0) {}
+	imp_res() : headQueue(nullptr), tailQueue(nullptr), curCustomer(nullptr), headOrderTable(nullptr), tailOrderTable(nullptr), headOrderQ(nullptr), tailOrderQ(nullptr), numCustomers(0), currSizeQueue(0), jujutsu(0), jurei(0), numAfterKick(0), countPurple(0) {}
 
 	~imp_res()
 	{
@@ -94,7 +95,7 @@ public:
 
 		temp = temp->next;
 
-		while (temp != curCustomer)
+		while (temp && temp != curCustomer)
 		{
 			// cout << "Root:" << rootCurDifference << endl;
 			curDifference = abs(newCustomer->energy - temp->energy);
@@ -248,7 +249,7 @@ public:
 
 		customer *temp = curCustomer;
 
-		while (temp->next != curCustomer)
+		while (temp && temp->next != curCustomer)
 		{
 			if (name == temp->name)
 				return false;
@@ -259,11 +260,6 @@ public:
 
 	void addCustomerInQueue(customer *newCustomer)
 	{
-		if (newCustomer->energy == 0)
-		{
-			// cout << "Cook luon" << endl;
-			return;
-		}
 		if (currSizeQueue >= MAXSIZE)
 		{
 			// cout << " Het cho trong hang cho roi cook" << endl;
@@ -339,7 +335,7 @@ public:
 		customer *temp = listToDelete;
 		customer *prev1 = nullptr;
 
-		while (temp->name != kickedCustomer->name)
+		while (temp && temp->name != kickedCustomer->name)
 		{
 			if (temp->next == listToDelete)
 				return; // break?
@@ -400,7 +396,7 @@ public:
 		// numAfterKick = numCustomers;
 		customer *temp1 = headOrderTable;
 		customer *temp2 = curCustomer;
-		for (int i = 0; i < num; i++)
+		for (int i = 0; i < num && temp1; i++)
 		{
 			// cout << temp1->name << endl;
 			this->deleteCustomerWithName(curCustomer, temp1);
@@ -453,15 +449,17 @@ public:
 		}
 	}
 
-	void purpleMurasaki(int countPurple)
+	void purpleMurasaki()
 	{
 		if (currSizeQueue <= 1 || numCustomers == 0)
 			return;
+		countPurple = 0;
+		cout << countPurple << endl;
 		customer *checkAbsEnergy = headQueue;
 		customer *maxAbsEnergy = nullptr;
 		int numSort = 0;
 		int maxAbs = -1;
-		for (int j = 1; checkAbsEnergy != nullptr, j <= currSizeQueue; checkAbsEnergy = checkAbsEnergy -> next, j++)
+		for (int j = 1; checkAbsEnergy && j <= currSizeQueue; j++)
 		{
 			if (abs(checkAbsEnergy -> energy) >= maxAbs)
 			{
@@ -469,41 +467,18 @@ public:
 				numSort = j;
 				maxAbs = abs(checkAbsEnergy -> energy);
 			}
+			checkAbsEnergy = checkAbsEnergy -> next;
 		}
-		// while (checkAbsEnergy -> next != nullptr)
-		// {
-		// 	if (abs(checkAbsEnergy->energy) >= maxAbs)
-		// 	{
-		// 		maxAbs = abs(checkAbsEnergy->energy);
-		// 		maxAbsEnergy = checkAbsEnergy;
-		// 	}
-		// 	checkAbsEnergy = checkAbsEnergy->next;
-		// }
-		// if (abs(checkAbsEnergy->energy) >= maxAbs)
-		// {
-		// 	maxAbs = abs(checkAbsEnergy->energy);
-		// 	maxAbsEnergy = checkAbsEnergy;
-		// }
-		// int numSort = 0;
-		// customer *temp = headQueue;
-		// // customer *tempSort = headQueue;
-		// if (maxAbsEnergy == headQueue)
-		// 	return;
-		// while (temp != maxAbsEnergy->next)
-		// {
-		// 	numSort++;
-		// 	temp = temp->next;
-		// }
 
 		int incr = numSort / 2;
 		while (incr > 0)
 		{
 			checkAbsEnergy= headQueue;
-			for(checkAbsEnergy = headQueue; checkAbsEnergy != maxAbsEnergy -> next; checkAbsEnergy = checkAbsEnergy -> next)
+			for (checkAbsEnergy = headQueue; checkAbsEnergy != maxAbsEnergy -> next && checkAbsEnergy; checkAbsEnergy = checkAbsEnergy -> next)
 			{
 				int count = 0;
 				customer *tempSort = checkAbsEnergy ->next;
-				while (tempSort != maxAbsEnergy->next)
+				while (tempSort && tempSort != maxAbsEnergy->next)
 				{
 					count++;
 					if (count == incr)
@@ -518,11 +493,12 @@ public:
 							if (tempSort == maxAbsEnergy)
 								maxAbsEnergy = checkAbsEnergy;
 							swapInfo(checkAbsEnergy, tempSort);
-							// customer *tmp = checkAbsEnergy;
-							// checkAbsEnergy= tempSort;
-							// tempSort = tmp;
+							customer *tmp = checkAbsEnergy;
+							checkAbsEnergy= tempSort;
+							tempSort = tmp;
 							// swapCustomer(checkAbsEnergy, tempSort);
 							countPurple++;
+							cout << countPurple << endl;
 						}
 					}
 					tempSort = tempSort->next;
@@ -530,6 +506,7 @@ public:
 			}
 			incr /= 2;
 		}
+		cout << countPurple % MAXSIZE<< endl;
 	}
 
 	void swapInfo(customer *cus1, customer *cus2)
@@ -561,7 +538,7 @@ public:
 		{
 			jurei++;
 		}
-		while (count->next != curCustomer)
+		while (count && count->next != curCustomer)
 		{
 			if (count->energy > 0)
 			{
@@ -572,7 +549,7 @@ public:
 			count = count->next;
 		}
 		// cout << jujutsu << " " << jurei << endl;
-		while (temp2->energy > 0)
+		while (temp2 && temp2->energy > 0)
 		{
 			if (curCustomer->energy < 0)
 				break;
@@ -580,7 +557,7 @@ public:
 				temp2 = temp2->prev;
 		}
 		temp1 = temp1->next;
-		while (temp1->energy > 0)
+		while (temp1 && temp1->energy > 0)
 		{
 			if (temp1->energy < 0)
 				break;
@@ -618,7 +595,7 @@ public:
 					break;
 			}
 		}
-		while (temp4->energy < 0)
+		while (temp4 && temp4->energy < 0)
 		{
 			if (curCustomer->energy > 0)
 				break;
@@ -626,7 +603,7 @@ public:
 				temp4 = temp4->prev;
 		}
 		temp3 = temp3->next;
-		while (temp3->energy < 0)
+		while (temp3 && temp3->energy < 0)
 		{
 			if (temp3->energy > 0)
 				break;
@@ -670,7 +647,7 @@ public:
 	{
 		customer *current = temp;
 		int tempSum = 0;
-		for (int i = 0; i < numCustomers; i++)
+		for (int i = 0; i < numCustomers && current; i++)
 		{
 			tempSum += current->energy;
 			if (i == 3 && tempSum < curr)
@@ -704,7 +681,7 @@ public:
 		int minEnergy = 2147483647 - 1;
 		if (numCustomers == 4 || MAXSIZE == 4)
 		{
-			while (temp->next != curCustomer)
+			while (temp && temp->next != curCustomer)
 			{
 				if (temp->energy < minEnergy)
 				{
@@ -721,7 +698,7 @@ public:
 				curCustomer = temp;
 			}
 			temp = curCustomer;
-			while (temp->next != curCustomer)
+			while (temp && temp->next != curCustomer)
 			{
 				temp->print();
 				temp = temp->next;
@@ -730,7 +707,7 @@ public:
 		}
 		else
 		{
-			for (int i = 0; i < numCustomers; i++)
+			for (int i = 0; i < numCustomers && temp; i++)
 			{
 				sum += temp->energy;
 				if (i == 3)
@@ -749,7 +726,7 @@ public:
 				temp = temp->next;
 			}
 			temp = temp->next;
-			for (int i = 0; i < numCustomers; i++)
+			for (int i = 0; i < numCustomers && temp; i++)
 			{
 				calculateSum(temp, flagCustomer, flagFirst, current);
 				temp = temp->next;
@@ -758,7 +735,7 @@ public:
 			customer *tempFlagC = flagCustomer;
 			customer *minCustomer = tempFlagF;
 			tempFlagF = tempFlagF->next;
-			while (tempFlagF != tempFlagC->next)
+			while (tempFlagF && tempFlagF != tempFlagC->next)
 			{
 				if (tempFlagF->energy < minCustomer->energy)
 				{
@@ -769,12 +746,12 @@ public:
 					tempFlagF = tempFlagF->next;
 			}
 			customer *tempMin = minCustomer;
-			while (tempMin != flagCustomer->next)
+			while (tempMin && tempMin != flagCustomer->next)
 			{
 				tempMin->print();
 				tempMin = tempMin->next;
 			}
-			while (flagFirst->next != minCustomer)
+			while (flagFirst && flagFirst->next != minCustomer)
 			{
 				flagFirst->print();
 				flagFirst = flagFirst->next;
@@ -794,9 +771,8 @@ public:
 		customer *temp2 = headQueue;
 		customer *temp3 = headOrderTable;
 		int sumJujutsuEnergy = 0;
-		int absSumCustomerEnergy = 0;
-		cout << "bug in expansion kick out" << endl;		
-		while (temp1->next != curCustomer)
+		int absSumCustomerEnergy = 0;	
+		while (temp1 && temp1->next != curCustomer)
 		{
 			if (temp1->energy > 0)
 			{
@@ -818,9 +794,9 @@ public:
 		int jureiInTable = jurei;
 		// cout << numCustomers << " " << jurei << endl;
 
-		if (headQueue)
+		if (currSizeQueue != 0)
 		{
-			while (temp2->next != nullptr)
+			while (temp2 && temp2->next != nullptr)
 			{
 				if (temp2->energy > 0)
 				{
@@ -843,16 +819,15 @@ public:
 		// cout << numCustomers << " " << jurei << endl;
 		// tính tổng chú thuật sư và oán linh có mặt trong nhà hàng
 
-		temp1 = curCustomer;
-		temp2 = headQueue;
-
 		// If not have any "chu su" hoac "oan linh" thi ket thuc
 		if (numCustomers == 0 || jujutsu == 0 || jurei == 0)
 		{
 			return;
 		}
 
-		while (temp1->next != curCustomer)
+		temp1 = curCustomer;
+		temp2 = headQueue;
+		while (temp1 && temp1->next != curCustomer)
 		{
 			if (temp1->energy > 0)
 				sumJujutsuEnergy += temp1->energy;
@@ -866,9 +841,9 @@ public:
 			absSumCustomerEnergy += temp1->energy;
 		//
 		// cout << numCustomers << " " << jurei << endl;
-		if (headQueue)
+		if (currSizeQueue != 0)
 		{
-			while (temp2->next != nullptr)
+			while (temp2 && temp2->next != nullptr)
 			{
 				if (temp2->energy < 0)
 					absSumCustomerEnergy += temp2->energy;
@@ -924,7 +899,7 @@ public:
 		customer *temp = curCustomer;
 		customer *kickedCustomer = nullptr;
 
-		while (temp->next != curCustomer)
+		while (temp && temp->next != curCustomer)
 		{
 			if (deleteJujutsu)
 			{
@@ -986,7 +961,7 @@ public:
 		{
 			for (int i = 0; i < numCustomers && temp; i++)
 			{
-				cout << "Temp: " << temp->name << endl;
+				// cout << "Temp: " << temp->name << endl;
 				if (temp->energy < 0)
 				{
 					if (temp == headList)
@@ -1003,13 +978,13 @@ public:
 					{
 						temp->next->prev = temp->prev;
 					}
-					cout << "bug" << endl;
+					// cout << "bug" << endl;
 					temp->print();
-					cout << "bug in delete order / queue"<< endl;
+					// cout << "bug in delete order / queue"<< endl;
 					deletedCustomer = temp;
 					temp = temp->next;
 					delete deletedCustomer;
-					cout << "debug" << endl;
+					// cout << "debug" << endl;
 					// cout << "bug"<< endl;
 				}
 				else{
@@ -1067,7 +1042,7 @@ public:
 		// cout << temp2 -> name << "-" << temp2 -> energy << endl;
 		if (num > 0)
 		{
-			while (temp1->next != curCustomer)
+			while (temp1 && temp1->next != curCustomer)
 			{
 				temp1->print();
 				temp1 = temp1->next;
@@ -1076,7 +1051,7 @@ public:
 		}
 		else if (num < 0)
 		{
-			while (temp1->prev != curCustomer)
+			while (temp1 && temp1->prev != curCustomer)
 			{
 				temp1->print();
 				temp1 = temp1->prev;
@@ -1090,7 +1065,7 @@ public:
 			else
 			{
 				customer *temp2 = headQueue;
-				while (temp2->next != nullptr)
+				while (temp2 && temp2->next != nullptr)
 				{
 					temp2->print();
 					temp2 = temp2->next;
@@ -1115,13 +1090,14 @@ public:
 	{
 		cout << "blue " << num << endl;
 		this->kickOutCustomer(num);
+		cout << "bug"<< endl;
 		this->insertAfterKick();
+		cout << "BUG" << endl;
 	}
 	void PURPLE()
 	{
-		// cout << "purple" << endl;
-		int countPurple = 0;
-		this->purpleMurasaki(countPurple);
+		cout << "purple" << endl;
+		this->purpleMurasaki();
 		BLUE(countPurple % MAXSIZE);
 		this->insertAfterKick();
 	}
@@ -1139,7 +1115,6 @@ public:
 	{
 		cout << "domain_expansion" << endl;
 		this->expansionKickOut();
-		cout << "bug domain expansion"<< endl;
 		this->insertAfterKick();
 	}
 	void LIGHT(int num)
