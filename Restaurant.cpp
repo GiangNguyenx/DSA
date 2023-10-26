@@ -304,11 +304,13 @@ public:
 
 		if (currSizeQueue != 0 || headQueue)
 		{
-			// cout << "Insert after kick: " << currSizeQueue << headQueue << endl;
-			while (numCustomers < MAXSIZE)
+			// cout << "Insert after kick: " << currSizeQueue << headQueue->name << endl;
+			while (numCustomers < MAXSIZE && queueToTable)
 			{
+				// cout << "Insert after kick: " << currSizeQueue << queueToTable->name << endl;
 				insertToTable(queueToTable->name, queueToTable->energy);
 				queueToTable = queueToTable->next;
+				headQueue = queueToTable;
 				deleteHeadList(headQueue);
 				currSizeQueue--;
 			}
