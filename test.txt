@@ -1,5 +1,4 @@
 MAXSIZE 10
-PURPLE
 RED yf -6
 LIGHT 1
 RED ls -8

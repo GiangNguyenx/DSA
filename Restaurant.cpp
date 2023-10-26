@@ -43,7 +43,7 @@ public:
 			return;
 		}
 		customer *tmp;
-		while (temp != curCustomer)
+		while (temp && temp != curCustomer)
 		{
 			tmp = temp;
 			temp = temp->next;
@@ -54,7 +54,7 @@ public:
 		tmp = NULL;
 		temp = NULL;
 
-		while (tempQ != NULL)
+		while (tempQ && tempQ != NULL)
 		{
 			customer *cur = tempQ;
 			tempQ = tempQ->next;
@@ -64,7 +64,7 @@ public:
 		headQueue = NULL;
 		tailQueue = NULL;
 
-		while (tempOT != NULL)
+		while (tempOT && tempOT != NULL)
 		{
 			customer *cur = tempOT;
 			tempOT = tempOT->next;
@@ -74,7 +74,7 @@ public:
 		headOrderTable = NULL;
 		tailOrderTable = NULL;
 
-		while (tempOQ != NULL)
+		while (tempOQ && tempOQ != NULL)
 		{
 			customer *cur = tempOQ;
 			tempOQ = tempOQ->next;
@@ -238,6 +238,7 @@ public:
 		{
 			// customer *cus = new customer(name, energy, nullptr, nullptr);
 			addCustomerInQueue(newCustomer);
+			orderOfQueue(newCustomer ->name, newCustomer -> energy);
 		}
 	}
 
@@ -295,6 +296,21 @@ public:
 		tailOrderTable->next = newCustomer;
 		newCustomer->prev = tailOrderTable;
 		tailOrderTable = newCustomer;
+	}
+
+		void orderOfQueue(string name, int energy)
+	{
+		customer *newCustomer = new customer(name, energy, nullptr, nullptr);
+		if (!headOrderQ)
+		{
+			headOrderQ = newCustomer;
+			tailOrderQ = newCustomer;
+			return;
+		}
+
+		tailOrderQ->next = newCustomer;
+		newCustomer->prev = tailOrderQ;
+		tailOrderQ = newCustomer;
 	}
 
 	void insertAfterKick()
@@ -1067,12 +1083,12 @@ public:
 			else
 			{
 				customer *temp2 = headQueue;
-				while (temp2 && temp2->next != nullptr)
+				while (temp2 && temp2 -> next != nullptr)
 				{
 					temp2->print();
 					temp2 = temp2->next;
 				}
-				temp2->print();
+				if (temp2) temp2->print();
 			}
 		}
 	}
@@ -1092,9 +1108,8 @@ public:
 	{
 		cout << "blue " << num << endl;
 		this->kickOutCustomer(num);
-		cout << "bug"<< endl;
+		cout << headQueue -> name << endl;
 		this->insertAfterKick();
-		cout << "BUG" << endl;
 	}
 	void PURPLE()
 	{
