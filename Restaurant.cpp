@@ -389,9 +389,6 @@ public:
 
 	void kickOutCustomer(int num)
 	{
-		// numAfterKick = numCustomers;
-		customer *temp1 = headOrderTable;
-		customer *temp2 = curCustomer;
 		if (num >= numCustomers || num >= MAXSIZE)
 		{
 			num = numCustomers;
@@ -400,6 +397,9 @@ public:
 		{
 			return;
 		}
+		// numAfterKick = numCustomers;
+		customer *temp1 = headOrderTable;
+		customer *temp2 = curCustomer;
 		for (int i = 0; i < num; i++)
 		{
 			// cout << temp1->name << endl;
@@ -458,68 +458,78 @@ public:
 		if (currSizeQueue <= 1 || numCustomers == 0)
 			return;
 		customer *checkAbsEnergy = headQueue;
-		customer *maxAbsEnergy;
-		int maxAbs = 0;
-		while (checkAbsEnergy != tailQueue)
-		{
-			if (abs(checkAbsEnergy->energy) >= maxAbs)
-			{
-				maxAbs = abs(checkAbsEnergy->energy);
-				maxAbsEnergy = checkAbsEnergy;
-			}
-			checkAbsEnergy = checkAbsEnergy->next;
-		}
-		if (abs(checkAbsEnergy->energy) >= maxAbs)
-		{
-			maxAbs = abs(checkAbsEnergy->energy);
-			maxAbsEnergy = checkAbsEnergy;
-		}
+		customer *maxAbsEnergy = nullptr;
 		int numSort = 0;
-		customer *temp = headQueue;
-		// customer *tempSort = headQueue;
-		if (maxAbsEnergy == headQueue)
-			return;
-		while (temp != maxAbsEnergy->next)
+		int maxAbs = -1;
+		for (int j = 1; checkAbsEnergy != nullptr, j <= currSizeQueue; checkAbsEnergy = checkAbsEnergy -> next, j++)
 		{
-			numSort++;
-			temp = temp->next;
+			if (abs(checkAbsEnergy -> energy) >= maxAbs)
+			{
+				maxAbsEnergy = checkAbsEnergy;
+				numSort = j;
+				maxAbs = abs(checkAbsEnergy -> energy);
+			}
 		}
+		// while (checkAbsEnergy -> next != nullptr)
+		// {
+		// 	if (abs(checkAbsEnergy->energy) >= maxAbs)
+		// 	{
+		// 		maxAbs = abs(checkAbsEnergy->energy);
+		// 		maxAbsEnergy = checkAbsEnergy;
+		// 	}
+		// 	checkAbsEnergy = checkAbsEnergy->next;
+		// }
+		// if (abs(checkAbsEnergy->energy) >= maxAbs)
+		// {
+		// 	maxAbs = abs(checkAbsEnergy->energy);
+		// 	maxAbsEnergy = checkAbsEnergy;
+		// }
+		// int numSort = 0;
+		// customer *temp = headQueue;
+		// // customer *tempSort = headQueue;
+		// if (maxAbsEnergy == headQueue)
+		// 	return;
+		// while (temp != maxAbsEnergy->next)
+		// {
+		// 	numSort++;
+		// 	temp = temp->next;
+		// }
 
 		int incr = numSort / 2;
 		while (incr > 0)
 		{
-			temp = headQueue;
-			while (temp != maxAbsEnergy->next)
+			checkAbsEnergy= headQueue;
+			for(checkAbsEnergy = headQueue; checkAbsEnergy != maxAbsEnergy -> next; checkAbsEnergy = checkAbsEnergy -> next)
 			{
 				int count = 0;
-				customer *tempSort = temp->next;
+				customer *tempSort = checkAbsEnergy ->next;
 				while (tempSort != maxAbsEnergy->next)
 				{
 					count++;
 					if (count == incr)
 					{
 						count = 0;
-						if (abs(temp->energy) < abs(tempSort->energy) || (abs(temp->energy) == abs(tempSort->energy) && (temp->prev->energy > tempSort->prev->energy)))
+						if (abs(checkAbsEnergy ->energy) < abs(tempSort->energy) || (abs(checkAbsEnergy ->energy) == abs(tempSort->energy) && (checkAbsEnergy ->prev->energy > tempSort->prev->energy)))
 						{
-							if (temp == headQueue)
+							if (checkAbsEnergy== headQueue)
 								headQueue = tempSort;
 							if (tempSort == tailQueue)
-								tailQueue = temp;
+								tailQueue = checkAbsEnergy;
 							if (tempSort == maxAbsEnergy)
-								maxAbsEnergy = temp;
-							swapInfo(temp, tempSort);
-							customer *tmp = temp;
-							temp = tempSort;
-							tempSort = tmp;
+								maxAbsEnergy = checkAbsEnergy;
+							swapInfo(checkAbsEnergy, tempSort);
+							// customer *tmp = checkAbsEnergy;
+							// checkAbsEnergy= tempSort;
+							// tempSort = tmp;
+							// swapCustomer(checkAbsEnergy, tempSort);
 							countPurple++;
 						}
 					}
 					tempSort = tempSort->next;
 				}
-				temp = temp->next;
 			}
+			incr /= 2;
 		}
-		incr /= 2;
 	}
 
 	void swapInfo(customer *cus1, customer *cus2)
@@ -534,15 +544,15 @@ public:
 
 	void reversalTable()
 	{
+		if (numCustomers == 0 || numCustomers == 1)
+		{
+			return;
+		}
 		customer *count = curCustomer;
 		customer *temp1 = curCustomer;
 		customer *temp2 = curCustomer;
 		customer *temp3 = curCustomer;
 		customer *temp4 = curCustomer;
-		if (numCustomers == 0 || numCustomers == 1)
-		{
-			return;
-		}
 		if (curCustomer->prev->energy > 0)
 		{
 			jujutsu++;
@@ -684,14 +694,14 @@ public:
 
 	void printMinInSubString()
 	{
+		if (numCustomers < 4)
+			return;
 		customer *flagCustomer = nullptr;
 		customer *temp = curCustomer;
 		customer *flagFirst = curCustomer;
 		int sum = 0;
 		int current = temp->energy;
 		int minEnergy = 2147483647 - 1;
-		if (numCustomers < 4)
-			return;
 		if (numCustomers == 4 || MAXSIZE == 4)
 		{
 			while (temp->next != curCustomer)
@@ -777,7 +787,8 @@ public:
 	{
 		jujutsu = 0;
 		jurei = 0;
-		if (numCustomers == 0 || !curCustomer) return;
+		if (numCustomers == 0 || !curCustomer)
+			return;
 		customer *temp = curCustomer->prev;
 		customer *temp1 = curCustomer;
 		customer *temp2 = headQueue;
@@ -806,8 +817,9 @@ public:
 		int jujutsuInTable = jujutsu;
 		int jureiInTable = jurei;
 		// cout << numCustomers << " " << jurei << endl;
-		
-		if (headQueue){
+
+		if (headQueue)
+		{
 			while (temp2->next != nullptr)
 			{
 				if (temp2->energy > 0)
@@ -852,9 +864,10 @@ public:
 			sumJujutsuEnergy += temp1->energy;
 		else
 			absSumCustomerEnergy += temp1->energy;
-		// 
+		//
 		// cout << numCustomers << " " << jurei << endl;
-		if (headQueue){
+		if (headQueue)
+		{
 			while (temp2->next != nullptr)
 			{
 				if (temp2->energy < 0)
@@ -890,7 +903,8 @@ public:
 
 	void deleteInTable(customer *kickedCustomer)
 	{
-		if (kickedCustomer == curCustomer){
+		if (kickedCustomer == curCustomer)
+		{
 			curCustomer = curCustomer->next;
 		}
 
@@ -904,7 +918,7 @@ public:
 
 		delete kickedCustomer;
 	}
-	
+
 	void deleteInTableWithEnergy(bool deleteJujutsu)
 	{
 		customer *temp = curCustomer;
@@ -920,7 +934,8 @@ public:
 					temp = temp->next;
 					deleteInTable(kickedCustomer);
 				}
-				else {
+				else
+				{
 					temp = temp->next;
 				}
 			}
@@ -932,7 +947,8 @@ public:
 					temp = temp->next;
 					deleteInTable(kickedCustomer);
 				}
-				else {
+				else
+				{
 					temp = temp->next;
 				}
 			}
@@ -955,12 +971,14 @@ public:
 			}
 		}
 	}
-	
+
 	void deleteInOrderOrQueueWithEnergy(bool check, customer *headList)
 	{
-		if (numCustomers == 0 || currSizeQueue == 0) return;
-		if (!headList) return;
-		
+		if (numCustomers == 0 || currSizeQueue == 0)
+			return;
+		if (!headList)
+			return;
+
 		customer *temp = headList;
 
 		if (!check)
@@ -983,12 +1001,15 @@ public:
 					{
 						temp->next->prev = temp->prev;
 					}
-					temp -> print();
+					cout << "bug" << endl;
+					temp->print();
 					cout << "bug in delete order / queue"<< endl;
 					delete temp;
+					cout << "debug" << endl;
 					// cout << "bug"<< endl;
 				}
 				temp = temp->next;
+				// if (temp == nullptr) break;
 			}
 			// temp = headList;
 			// while (temp -> next != nullptr){
@@ -1016,11 +1037,12 @@ public:
 					{
 						temp->next->prev = temp->prev;
 					}
-					temp -> print();
+					temp->print();
 					// cout << "bug"<< endl;
 					delete temp;
 				}
 				temp = temp->next;
+				// if (temp == nullptr) break;
 			}
 		}
 	}
@@ -1030,7 +1052,6 @@ public:
 		if (numCustomers == 0)
 			return;
 		customer *temp1 = curCustomer;
-		customer *temp2 = headQueue;
 		// cout << temp2 -> name << "-" << temp2 -> energy << endl;
 		if (num > 0)
 		{
@@ -1050,12 +1071,13 @@ public:
 			}
 			temp1->print();
 		}
-		else
+		else if (num == 0)
 		{
 			if (currSizeQueue == 0)
 				return;
 			else
 			{
+				customer *temp2 = headQueue;
 				while (temp2->next != nullptr)
 				{
 					temp2->print();
@@ -1098,7 +1120,7 @@ public:
 	}
 	void UNLIMITED_VOID()
 	{
-		// cout << "unlimited_void" << endl;
+		cout << "unlimited_void" << endl;
 		this->printMinInSubString();
 	}
 	void DOMAIN_EXPANSION()
