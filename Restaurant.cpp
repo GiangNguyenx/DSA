@@ -301,13 +301,14 @@ public:
 		tailOrderTable = newCustomer;
 	}
 
-	void inserAfterKick()
+	void insertAfterKick()
 	{
 		// Get customer from queue to table if queue has any and table has slot
 		customer *queueToTable = headQueue;
 
-		if (currSizeQueue != 0)
+		if (currSizeQueue != 0 || headQueue)
 		{
+			// cout << "Insert after kick: " << currSizeQueue << headQueue << endl;
 			while (numCustomers < MAXSIZE)
 			{
 				insertToTable(queueToTable->name, queueToTable->energy);
@@ -316,7 +317,7 @@ public:
 				currSizeQueue--;
 			}
 		}
-		else return;
+		return;
 	}
 
 	void deleteHeadList(customer *headList)
@@ -783,7 +784,7 @@ public:
 		customer *temp3 = headOrderTable;
 		int sumJujutsuEnergy = 0;
 		int absSumCustomerEnergy = 0;
-		cout << "bug"<< endl;		
+		cout << "bug in expansion kick out" << endl;		
 		while (temp1->next != curCustomer)
 		{
 			if (temp1->energy > 0)
@@ -983,7 +984,7 @@ public:
 						temp->next->prev = temp->prev;
 					}
 					temp -> print();
-					cout << "bug"<< endl;
+					cout << "bug in delete order / queue"<< endl;
 					delete temp;
 					// cout << "bug"<< endl;
 				}
@@ -1080,7 +1081,7 @@ public:
 	{
 		cout << "blue " << num << endl;
 		this->kickOutCustomer(num);
-		this->inserAfterKick();
+		this->insertAfterKick();
 	}
 	void PURPLE()
 	{
@@ -1088,7 +1089,7 @@ public:
 		int countPurple = 0;
 		this->purpleMurasaki(countPurple);
 		BLUE(countPurple % MAXSIZE);
-		this->inserAfterKick();
+		this->insertAfterKick();
 	}
 	void REVERSAL()
 	{
@@ -1104,8 +1105,8 @@ public:
 	{
 		cout << "domain_expansion" << endl;
 		this->expansionKickOut();
-		cout << "bug"<< endl;
-		this->inserAfterKick();
+		cout << "bug domain expansion"<< endl;
+		this->insertAfterKick();
 	}
 	void LIGHT(int num)
 	{
